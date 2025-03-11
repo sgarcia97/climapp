@@ -1,11 +1,20 @@
 import { View, Text, Image } from 'react-native'
 import styles from '../styles/styles'
 
-const Card = () => {
+type CardProps = {
+    title:string;
+    img?:string;
+    val:string;
+}
+const Card = ({title, img, val}:CardProps) => {
     return(
         <View style={styles.card}>
-            <View><Image/><Text></Text></View>
-            <View><Text></Text></View>
+            <View style={styles.cardContent}>
+            <View><Image/><Text>{title}</Text></View>
+            <View><Text style={styles.metric}>{val}</Text></View>
+            </View>
         </View>
     )
 }
+
+export default Card

@@ -38,10 +38,25 @@ const styles = StyleSheet.create({
     },
     cardWrapper:{
         display:'flex',
-        gap:10,
+        flexDirection:'row',
+        flexWrap:'wrap',
+        gap:15,
+        paddingBlock:10
     },
     card:{
-        backgroundColor:'#fff'
+        backgroundColor:'#fff',
+        borderRadius:10,
+        width:'47%',
+        boxShadow:'0 2 15 0 rgba(50,50,50,0.1)'
+    },
+    cardContent:{
+        paddingInline:15,
+        paddingBlock:5
+    },
+    metric:{
+        fontSize:35,
+        fontWeight:800,
+        color:'#000'
     }
 })
 
