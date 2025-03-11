@@ -49,9 +49,20 @@ const styles = StyleSheet.create({
         width:'47%',
         boxShadow:'0 2 15 0 rgba(50,50,50,0.1)'
     },
+    cardImage:{
+        width:15,
+        height:15
+    },
+    cardHeader:{
+        display:'flex',
+        flexDirection:'row',
+        flexWrap:'nowrap',
+        gap:5,
+        alignItems:'center'
+    },
     cardContent:{
         paddingInline:15,
-        paddingBlock:5
+        paddingBlock:7
     },
     metric:{
         fontSize:35,

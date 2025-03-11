@@ -3,14 +3,15 @@ import styles from '../styles/styles'
 
 type CardProps = {
     title:string;
-    img?:string;
+    img:any;
     val:string;
 }
 const Card = ({title, img, val}:CardProps) => {
+    const req = '../assets/'+img
     return(
         <View style={styles.card}>
             <View style={styles.cardContent}>
-            <View><Image/><Text>{title}</Text></View>
+            <View style={styles.cardHeader}><Image style={styles.cardImage} source={img}/><Text>{title}</Text></View>
             <View><Text style={styles.metric}>{val}</Text></View>
             </View>
         </View>
