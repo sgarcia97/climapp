@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import Template from '../../components/Template'
 
 const Profile = () => {
     return(
-        <>
-        <Text>Welcome to ClimApp</Text>
-        </>
+        <Template title="Profile">
+        <Text></Text>
+        </Template>
     )
 }
 

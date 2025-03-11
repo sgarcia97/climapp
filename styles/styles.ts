@@ -35,6 +35,13 @@ const styles = StyleSheet.create({
         textTransform:'uppercase',
         letterSpacing:5,
         textAlign:'center'
+    },
+    cardWrapper:{
+        display:'flex',
+        gap:10,
+    },
+    card:{
+        backgroundColor:'#fff'
     }
 })
 

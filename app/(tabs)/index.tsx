@@ -4,8 +4,8 @@ import Template from '../../components/Template'
 
 const Home = () => {
     return(
-        <Template>
-        <Text>Welcome to ClimApp</Text>
+        <Template title="Welcome Guest">
+        <Text>Your area | Calgary</Text>
         </Template>
     )
 }
