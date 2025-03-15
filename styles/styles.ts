@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
   },
   mainView: {
     paddingInline: 20,
+    flex: 1,
   },
   mainViewVCentered: {
     flex: 1,
@@ -80,7 +81,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#ccc",
-    marginBottom: 10,
+  },
+  templateContainer: {
+    flexGrow: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  childrenWrapper: {
+    gap: 10,
+    flexDirection: "column",
+  },
+  errorText: {
+    color: "red",
   },
 });
 
