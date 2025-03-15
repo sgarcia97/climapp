@@ -2,10 +2,11 @@ import { ScrollView, View, Text } from "react-native";
 import styles from "../styles/styles";
 
 type TemplateProps = {
-  children: any;
+  children: React.ReactNode;
   title?: string;
   vCentered?: boolean;
 };
+
 const Template = ({
   children,
   title = "",
@@ -14,12 +15,18 @@ const Template = ({
   return (
     <ScrollView
       style={styles.mainView}
-      contentContainerStyle={vCentered ? styles.mainViewVCentered : undefined}
+      contentContainerStyle={[
+        styles.templateContainer,
+        vCentered && styles.mainViewVCentered,
+      ]}
     >
-      <View style={styles.titleWrapper}>
-        <Text style={styles.title}>{title}</Text>
-      </View>
-      {children}
+      {title ? (
+        <View style={styles.titleWrapper}>
+          <Text style={styles.title}>{title}</Text>
+        </View>
+      ) : null}
+
+      <View style={styles.childrenWrapper}>{children}</View>
     </ScrollView>
   );
 };

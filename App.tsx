@@ -1,3 +1,5 @@
-import { ExpoRouter } from 'expo-router';
+import { Stack } from "expo-router";
 
-export default ExpoRouter;
+export default function App() {
+  return <Stack />;
+}
