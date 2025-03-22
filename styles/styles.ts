@@ -94,6 +94,11 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
   },
+  emailResendMessage: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  emailResendSpam: { marginBottom: 20 },
 });
 
 export default styles;

@@ -1,18 +1,20 @@
 import { Text, View, Alert } from "react-native";
 import Template from "../../components/Template";
-import ClimButton from "../../components/ClimButton"; // Import button component
-import { useAuth } from "../../contexts/AuthContext"; // Import Auth Context
-import { useRouter } from "expo-router"; // Import router for navigation
+import ClimButton from "../../components/ClimButton";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Profile = () => {
   const { signOut, isGuest } = useAuth();
-  const router = useRouter();
 
   const handleLogout = async () => {
     try {
       await signOut();
-      Alert.alert("Logged Out", "You have been logged out.");
-      router.replace("/signin"); // Redirect to login screen
+      Alert.alert(
+        isGuest ? "Guest Mode Exited" : "Logged Out",
+        isGuest
+          ? "You are no longer in guest mode."
+          : "You have been logged out."
+      );
     } catch (error: any) {
       Alert.alert("Error", error.message || "Failed to log out.");
     }
