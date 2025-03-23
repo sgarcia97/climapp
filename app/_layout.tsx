@@ -1,27 +1,24 @@
 import { Stack } from "expo-router";
-import { AuthProvider } from "../contexts/AuthContext";
+import { AuthProvider, useAuth } from "../contexts/AuthContext";
+import { Text } from "react-native";
 
-const Layout = () => {
+export default function RootLayout() {
   return (
     <AuthProvider>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="signin"
-          options={{
-            title: "Sign in",
-          }}
-        />
-        <Stack.Screen
-          name="signup"
-          options={{
-            title: "Sign up",
-          }}
-        />
-      </Stack>
+      <RootLayoutContent />
     </AuthProvider>
   );
-};
+}
 
-export default Layout;
+function RootLayoutContent() {
+  const { isLoading } = useAuth();
+
+  if (isLoading) return <Text>Loading...</Text>;
+
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(auth)" />
+      <Stack.Screen name="(tabs)" />
+    </Stack>
+  );
+}

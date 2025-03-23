@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { View, Text, ScrollView, Button, ActivityIndicator, Alert } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Button,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
 import Template from "../../components/Template";
 
 const API_KEY = "9f52c523e2f147f397e131820252003"; // Your WeatherAPI key
@@ -39,7 +46,9 @@ const NewsFeed = () => {
           <ActivityIndicator size="large" color="blue" />
         ) : weather ? (
           <>
-            <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>
+            <Text
+              style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}
+            >
               {weather.location.name}, {weather.location.country}
             </Text>
             <Text>🌡 Temperature: {weather.current.temp_c}°C</Text>
@@ -48,7 +57,13 @@ const NewsFeed = () => {
 
             {/* Show Alerts if Available */}
             {weather.alerts && weather.alerts.alert.length > 0 ? (
-              <View style={{ marginTop: 15, padding: 10, backgroundColor: "#ffcccb" }}>
+              <View
+                style={{
+                  marginTop: 15,
+                  padding: 10,
+                  backgroundColor: "#ffcccb",
+                }}
+              >
                 <Text style={{ fontWeight: "bold" }}>⚠ Weather Alerts:</Text>
                 {weather.alerts.alert.map((alert: any, index: number) => (
                   <Text key={index} style={{ color: "red" }}>

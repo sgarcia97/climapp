@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { Text, View } from "react-native";
 import { supabase } from "../../api/UserApi";
 import styles from "../../styles/styles";
@@ -14,7 +13,7 @@ const Home = () => {
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isGuest) {
+    if (isGuest || !session) {
       setUser(null);
       return;
     }
@@ -39,7 +38,7 @@ const Home = () => {
   const welcomeTitle = isGuest
     ? "Welcome Guest"
     : user
-    ? `Welcome, ${user.email}`
+    ? `Welcome, ${user.user_metadata.display_name || user.email}`
     : "Welcome";
 
   return (
