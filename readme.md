@@ -5,7 +5,6 @@
 ### dependencies (package.json)
 ```javascript
 {
-  
   "name": "climapp",
   "version": "1.0.0",
   "main": "expo-router/entry",
@@ -19,6 +18,7 @@
     "@react-native-async-storage/async-storage": "^2.1.2",
     "@supabase/supabase-js": "^2.49.1",
     "expo": "~52.0.37",
+    "expo-location": "^18.0.8",
     "expo-router": "^4.0.19",
     "expo-status-bar": "~2.0.1",
     "react": "18.3.1",
@@ -31,7 +31,6 @@
     "typescript": "^5.3.3"
   },
   "private": true
-
 }
 ```
 
