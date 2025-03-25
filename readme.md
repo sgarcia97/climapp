@@ -2,7 +2,7 @@
 
 ## React-Native / Expo Documentation
 
-### dependencies (package.json0)
+### dependencies (package.json)
 ```javascript
 {
   
@@ -80,7 +80,6 @@ $$ LANGUAGE plpgsql;
 To automatically execute create_profile() after a new user is inserted, the following trigger was created:
 
 ```sql
-Edit
 CREATE TRIGGER user_signup_trigger
 AFTER INSERT ON auth.users
 FOR EACH ROW EXECUTE FUNCTION public.create_profile();
@@ -91,14 +90,12 @@ To ensure users can only access or modify their own profile, Row-Level Security 
 
 ### 1. Enabling RLS on the profiles Table
 ```sql
-Edit
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 This restricts access to the table unless explicit policies are defined.
 ```
 
 ### 2. Policy: Users Can Read Their Own Profile
 ```sql
-Edit
 CREATE POLICY "Users can read their own profile"
 ON public.profiles
 FOR SELECT
@@ -112,7 +109,6 @@ USING (auth.uid() = id);
 
 ### 3. Policy: Users Can Update Their Own Profile
 ```sql
-Edit
 CREATE POLICY "Users can update their own profile"
 ON public.profiles
 FOR UPDATE
