@@ -6,13 +6,20 @@ import Card from "../../components/Card";
 import { useState, useEffect } from "react";
 import { User } from "@supabase/supabase-js";
 import { useAuth } from "../../contexts/AuthContext";
+import { useLocation } from "../../utils/Location";
 
 const Home = () => {
   const [user, setUser] = useState<User | null>(null);
   const { session, isGuest } = useAuth();
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const { coordinates, cityInfo, locationErrorMsg, getLocation } =
+    useLocation();
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
   useEffect(() => {
+    setIsLoadingLocation(true);
+    getLocation().finally(() => setIsLoadingLocation(false));
+
     if (isGuest || !session) {
       setUser(null);
       return;
@@ -32,9 +39,9 @@ const Home = () => {
     if (session) {
       checkUser();
     }
-  }, [session, isGuest]);
+  }, [session, isGuest, getLocation]);
 
-  // for welcome message
+  // welcome message
   const welcomeTitle = isGuest
     ? "Welcome Guest"
     : user
@@ -44,7 +51,14 @@ const Home = () => {
   return (
     <Template title={welcomeTitle}>
       {fetchError && <Text style={styles.errorText}>{fetchError}</Text>}
-      <Text>Your area | Calgary</Text>
+      {locationErrorMsg && (
+        <Text style={styles.errorText}>{locationErrorMsg}</Text>
+      )}
+      {isLoadingLocation ? (
+        <Text>Loading location...</Text>
+      ) : (
+        <Text>Your area | {cityInfo?.city || "Unknown"}</Text>
+      )}
       <View style={styles.cardWrapper}>
         <Card
           title="Temperature"
