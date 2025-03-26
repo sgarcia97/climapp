@@ -38,7 +38,7 @@ const Login = () => {
   };
 
   return (
-    <Template title="Welcome to Climapp" vCentered={true}>
+    <Template title="Welcome to Climapp" vCentered={true} topGuard={true}>
       {errorMessage ? (
         <Text style={styles.errorText}>{errorMessage}</Text>
       ) : null}

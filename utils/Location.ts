@@ -1,24 +1,6 @@
 import * as Location from "expo-location";
 import { useState, useCallback } from "react";
-
-interface Coordinates {
-  latitude: number;
-  longitude: number;
-}
-
-interface GeocodeResult {
-  city: string | null;
-  country: string | null;
-  street?: string | null;
-  region?: string | null;
-}
-
-interface LocationResult {
-  coordinates: Coordinates | null;
-  cityInfo: GeocodeResult | null;
-  locationErrorMsg: string | null;
-  getLocation: () => Promise<void>;
-}
+import { Coordinates, GeocodeResult, LocationResult } from "../types/types";
 
 // hook
 export const useLocation = (): LocationResult => {

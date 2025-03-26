@@ -1,16 +1,12 @@
 import { ScrollView, View, Text } from "react-native";
 import styles from "../styles/styles";
-
-type TemplateProps = {
-  children: React.ReactNode;
-  title?: string;
-  vCentered?: boolean;
-};
+import { TemplateProps } from "../types/climappTypes";
 
 const Template = ({
   children,
   title = "",
   vCentered = false,
+  topGuard = false,
 }: TemplateProps) => {
   return (
     <ScrollView
@@ -21,7 +17,7 @@ const Template = ({
       ]}
     >
       {title ? (
-        <View style={styles.titleWrapper}>
+        <View style={[styles.titleWrapper, topGuard && styles.titleTopGuard]}>
           <Text style={styles.title}>{title}</Text>
         </View>
       ) : null}
