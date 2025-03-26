@@ -11,6 +11,9 @@ const styles = StyleSheet.create({
   titleWrapper: {
     paddingBlock: 20,
   },
+  titleTopGuard: {
+    marginTop: 50,
+  },
   title: {
     fontSize: 20,
     fontWeight: "bold",
