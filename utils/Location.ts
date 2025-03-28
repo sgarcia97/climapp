@@ -1,10 +1,16 @@
 import * as Location from "expo-location";
 import { useState, useCallback } from "react";
-import { Coordinates, GeocodeResult, LocationResult } from "../types/types";
+import {
+  Coordinates,
+  GeocodeResult,
+  LocationResult,
+} from "../types/climappTypes";
 
 // hook
-export const useLocation = (): LocationResult => {
-  const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
+export const useLocation = (loc?: Coordinates): LocationResult => {
+  const [coordinates, setCoordinates] = useState<Coordinates | null>(
+    loc ?? null
+  );
   const [cityInfo, setCityInfo] = useState<GeocodeResult | null>(null);
   const [locationErrorMsg, setLocationErrorMsg] = useState<string | null>(null);
 
@@ -16,14 +22,20 @@ export const useLocation = (): LocationResult => {
         return;
       }
 
-      const locationData = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
-      });
+      let coords: Coordinates;
 
-      const coords: Coordinates = {
-        latitude: locationData.coords.latitude,
-        longitude: locationData.coords.longitude,
-      };
+      if (!loc) {
+        const locationData = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.High,
+        });
+
+        coords = {
+          latitude: locationData.coords.latitude,
+          longitude: locationData.coords.longitude,
+        };
+      } else {
+        coords = loc;
+      }
 
       const geocode = await Location.reverseGeocodeAsync({
         latitude: coords.latitude,

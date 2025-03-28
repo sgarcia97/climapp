@@ -17,6 +17,13 @@ interface LocationResult {
   getLocation: () => Promise<void>;
 }
 
+interface SavedLocation {
+  id: string;
+  cityInfo: GeocodeResult | null;
+  coordinates: Coordinates | null;
+  locationErrorMsg: string | null;
+}
+
 interface TemplateProps {
   children: React.ReactNode;
   title?: string;
@@ -24,4 +31,16 @@ interface TemplateProps {
   topGuard?: boolean;
 }
 
-export { GeocodeResult, Coordinates, LocationResult, TemplateProps };
+interface MapScreenProps {
+  coords: Coordinates | null;
+  onLocationChange?: (coords: Coordinates) => void;
+}
+
+export {
+  GeocodeResult,
+  Coordinates,
+  LocationResult,
+  TemplateProps,
+  SavedLocation,
+  MapScreenProps,
+};

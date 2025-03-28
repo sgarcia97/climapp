@@ -17,9 +17,9 @@ const TabLayout = () => {
 
       {/* Search Tab */}
       <Tabs.Screen
-        name="search"
+        name="locations"
         options={{
-          title: "Search",
+          title: "My Locations",
           tabBarIcon: ({ color }) => (
             <FontAwesome name="search" color={color} size={15} />
           ),

@@ -7,6 +7,13 @@ import { useState, useEffect } from "react";
 import { User } from "@supabase/supabase-js";
 import { useAuth } from "../../contexts/AuthContext";
 import { useLocation } from "../../utils/Location";
+import {
+  loadLocations,
+  syncLocationsToSupabase,
+} from "../../api/LocationService";
+import { SavedLocation } from "../../types/climappTypes";
+import uuid from "react-native-uuid";
+import { saveLocationsToStorage } from "../../api/LocationService";
 
 const Home = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -17,36 +24,60 @@ const Home = () => {
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
   useEffect(() => {
-    setIsLoadingLocation(true);
-    getLocation().finally(() => setIsLoadingLocation(false));
+    const fetchUserAndUpdateLocations = async () => {
+      if (isGuest || !session) {
+        setUser(null);
+        return;
+      }
 
-    if (isGuest || !session) {
-      setUser(null);
-      return;
-    }
+      setIsLoadingLocation(true);
 
-    const checkUser = async () => {
       try {
+        await getLocation();
         const { data, error } = await supabase.auth.getUser();
         if (error) throw error;
         setUser(data?.user || null);
+
+        // load locations
+        let savedLocations = (await loadLocations(session.user.id)) || [];
+
+        // create new saved location object from current location
+        const currentLocation: SavedLocation = {
+          id: uuid.v4(),
+          coordinates: coordinates,
+          cityInfo: cityInfo,
+          locationErrorMsg: null,
+        };
+
+        // reserve first slot for my location
+        if (savedLocations.length > 0) {
+          savedLocations[0] = currentLocation;
+        } else {
+          savedLocations.push(currentLocation);
+        }
+
+        // save to local
+        await saveLocationsToStorage(savedLocations);
+        // sync to supabase
+        await syncLocationsToSupabase(session.user.id);
+
+        console.log("Updated saved locations:", savedLocations);
       } catch (error: any) {
-        console.error("Error fetching user:", error.message);
-        setFetchError("Failed to load user data");
+        console.error("Error updating locations:", error.message);
+      } finally {
+        setIsLoadingLocation(false);
       }
     };
 
-    if (session) {
-      checkUser();
-    }
+    fetchUserAndUpdateLocations();
   }, [session, isGuest, getLocation]);
 
   // welcome message
   const welcomeTitle = isGuest
     ? "Welcome Guest"
     : user
-    ? `Welcome, ${user.user_metadata.display_name || user.email}`
-    : "Welcome";
+      ? `Welcome, ${user.user_metadata.display_name || user.email}`
+      : "Welcome";
 
   return (
     <Template title={welcomeTitle}>

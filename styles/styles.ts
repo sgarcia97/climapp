@@ -102,6 +102,30 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   emailResendSpam: { marginBottom: 20 },
+  mapContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  map: {
+    width: "100%",
+    height: "100%",
+  },
+  mapButton: {
+    position: "absolute",
+    bottom: 50,
+    alignSelf: "center",
+    backgroundColor: "#6200ee",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    elevation: 5,
+  },
+  mapButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });
 
 export default styles;
