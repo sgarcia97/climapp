@@ -3,82 +3,130 @@ import {
   View,
   Text,
   ScrollView,
-  Button,
   ActivityIndicator,
   Alert,
+  Linking,
+  TouchableOpacity,
+  Image,
 } from "react-native";
 import Template from "../../components/Template";
 
-const API_KEY = "9f52c523e2f147f397e131820252003"; // Your WeatherAPI key
-const CITY = "Calgary"; // You can modify this or fetch dynamically
+const API_KEY = "4Vq7ZdRNJ5XJQnSrOTZoHP58tG48XJmrkwV1H9N0";
+const COUNTRY = "ca";
+const MAX_PAGES = 3;
+const ARTICLES_PER_PAGE = 12;
 
 const NewsFeed = () => {
-  const [weather, setWeather] = useState<any>(null);
+  const [articles, setArticles] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const fetchWeather = async () => {
+  const fetchNews = async (pageNumber = 1) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${CITY}&days=3&alerts=yes`
+        `https://api.thenewsapi.com/v1/news/top?api_token=${API_KEY}&locale=${COUNTRY}&limit=${ARTICLES_PER_PAGE}&page=${pageNumber}`
       );
       const data = await response.json();
 
-      if (data.error) {
-        throw new Error(data.error.message);
+      console.log(`Fetched page ${pageNumber}, articles: ${data.data.length}`);
+
+      if (!data.data) {
+        throw new Error("No news data found");
       }
 
-      setWeather(data);
+      // Append new articles
+      setArticles((prev) => [...prev, ...data.data]);
+      setPage(pageNumber);
     } catch (error: any) {
-      Alert.alert("Error", error.message || "Failed to fetch weather data");
+      Alert.alert("Error", error.message || "Failed to fetch news");
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchWeather(); // Fetch data when the page loads
+    fetchNews(1); // Initial fetch
   }, []);
 
   return (
-    <Template title="Weather Newsfeed">
-      <ScrollView contentContainerStyle={{ padding: 20 }}>
-        {loading ? (
+    <Template title="Top News">
+      <ScrollView contentContainerStyle={{ padding: 16 }}>
+        {loading && page === 1 ? (
           <ActivityIndicator size="large" color="blue" />
-        ) : weather ? (
+        ) : articles.length > 0 ? (
           <>
-            <Text
-              style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}
-            >
-              {weather.location.name}, {weather.location.country}
-            </Text>
-            <Text>🌡 Temperature: {weather.current.temp_c}°C</Text>
-            <Text>☁ Condition: {weather.current.condition.text}</Text>
-            <Text>💨 Wind Speed: {weather.current.wind_kph} km/h</Text>
-
-            {/* Show Alerts if Available */}
-            {weather.alerts && weather.alerts.alert.length > 0 ? (
-              <View
+            {articles.map((article, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => Linking.openURL(article.url)}
                 style={{
-                  marginTop: 15,
-                  padding: 10,
-                  backgroundColor: "#ffcccb",
+                  flexDirection: "row",
+                  marginBottom: 16,
+                  backgroundColor: "#fff",
+                  borderRadius: 10,
+                  overflow: "hidden",
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 4,
+                  elevation: 3,
                 }}
               >
-                <Text style={{ fontWeight: "bold" }}>⚠ Weather Alerts:</Text>
-                {weather.alerts.alert.map((alert: any, index: number) => (
-                  <Text key={index} style={{ color: "red" }}>
-                    - {alert.headline}
+                {article.image_url ? (
+                  <Image
+                    source={{ uri: article.image_url }}
+                    style={{
+                      width: 100,
+                      height: 100,
+                      resizeMode: "cover",
+                      alignSelf: "center",
+                    }}
+                  />
+                ) : (
+                  <View
+                    style={{
+                      width: 100,
+                      height: 100,
+                      backgroundColor: "#ccc",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      alignSelf: "center",
+                    }}
+                  >
+                    <Text style={{ color: "#666", fontSize: 12 }}>No Image</Text>
+                  </View>
+                )}
+                <View
+                  style={{
+                    flex: 1,
+                    paddingVertical: 10,
+                    paddingRight: 10,
+                    paddingLeft: 12,
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text numberOfLines={2} style={{ fontWeight: "bold", fontSize: 16 }}>
+                    {article.title}
                   </Text>
-                ))}
-              </View>
-            ) : (
-              <Text>No weather alerts at the moment.</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+
+            {/* Show More button */}
+            {page < MAX_PAGES && !loading && (
+              <TouchableOpacity onPress={() => fetchNews(page + 1)} style={{ alignItems: "center", marginTop: 10 }}>
+              <Text style={{ fontSize: 14, color: "black", textDecorationLine: "underline" }}>
+                Show More
+              </Text>
+            </TouchableOpacity>
             )}
 
-            <Button title="Refresh" onPress={fetchWeather} disabled={loading} />
+            {loading && page > 1 && (
+              <ActivityIndicator size="small" color="blue" style={{ marginTop: 10 }} />
+            )}
           </>
         ) : (
-          <Text>No weather data available.</Text>
+          <Text>No news articles available.</Text>
         )}
       </ScrollView>
     </Template>
