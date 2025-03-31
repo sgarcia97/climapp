@@ -102,6 +102,72 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   emailResendSpam: { marginBottom: 20 },
+  mapContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  map: {
+    width: "100%",
+    height: "100%",
+  },
+  mapButton: {
+    position: "absolute",
+    bottom: 50,
+    alignSelf: "center",
+    backgroundColor: "#6200ee",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    elevation: 5,
+  },
+  mapButtonText: {
+    color: "white",
+    flexShrink: 1,
+    fontWeight: "bold",
+  },
+  mapScrollView: {
+    position: "absolute",
+    top: 10,
+    left: 10,
+    right: 10,
+    maxHeight: 200,
+    zIndex: 1,
+  },
+  pinDefault: {
+    padding: 10,
+    borderRadius: 20,
+    marginVertical: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  pinGreen: {
+    backgroundColor: "#4CAF50",
+  },
+  pinRed: {
+    backgroundColor: "#2196F3",
+  },
+  mapButtonDefault: {
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "auto",
+    minWidth: 180,
+    maxWidth: "100%",
+  },
+  mapButtonGreen: {
+    backgroundColor: "#4CAF50",
+  },
+  mapButtonRed: {
+    backgroundColor: "#2196F3",
+  },
+  mapButtonMR: {
+    marginRight: 10,
+  },
 });
 
 export default styles;
