@@ -45,11 +45,18 @@ CREATE TABLE public.profiles (
   email text NOT NULL,
   preferred_name text NULL,
   preferences jsonb NULL DEFAULT '{}'::jsonb,
+  saved_locations jsonb NULL DEFAULT '[]'::jsonb,
   created_at timestamp with time zone NULL DEFAULT now(),
   CONSTRAINT profiles_pkey PRIMARY KEY (id),
   CONSTRAINT profiles_id_fkey FOREIGN KEY (id) REFERENCES auth.users (id) ON DELETE CASCADE
 ) TABLESPACE pg_default;
 
+```
+
+Note:  earlier versions used preferences for saved locations. Now, a new column is used specifically to handle that data
+
+```sql
+ALTER TABLE profiles ADD COLUMN saved_locations jsonb DEFAULT '[]'::jsonb;
 ```
 
 ### Step 2: Creating the Profile Auto-Insert Function

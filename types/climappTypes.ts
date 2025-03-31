@@ -1,8 +1,10 @@
 interface GeocodeResult {
-  city: string | null;
-  country: string | null;
+  city?: string | null;
+  country?: string | null;
   street?: string | null;
   region?: string | null;
+  postalCode?: string | null;
+  formattedAddress?: string | null;
 }
 
 interface Coordinates {
@@ -12,16 +14,18 @@ interface Coordinates {
 
 interface LocationResult {
   coordinates: Coordinates | null;
-  cityInfo: GeocodeResult | null;
+  locationDetails: GeocodeResult | null;
   locationErrorMsg: string | null;
-  getLocation: () => Promise<void>;
+  getLocation: () => Promise<{
+    coordinates: Coordinates | null;
+    locationDetails: GeocodeResult | null;
+  }>;
 }
 
 interface SavedLocation {
   id: string;
-  cityInfo: GeocodeResult | null;
+  geocode: GeocodeResult | null;
   coordinates: Coordinates | null;
-  locationErrorMsg: string | null;
 }
 
 interface TemplateProps {
@@ -36,6 +40,13 @@ interface MapScreenProps {
   onLocationChange?: (coords: Coordinates) => void;
 }
 
+interface PinListProps {
+  pins: Coordinates[];
+  goToPin: (pin: Coordinates) => void;
+  handleRemovePin: (index: number) => void;
+  pinTitles: string[];
+}
+
 export {
   GeocodeResult,
   Coordinates,
@@ -43,4 +54,5 @@ export {
   TemplateProps,
   SavedLocation,
   MapScreenProps,
+  PinListProps,
 };

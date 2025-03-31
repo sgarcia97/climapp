@@ -12,14 +12,15 @@ import {
   syncLocationsToSupabase,
 } from "../../api/LocationService";
 import { SavedLocation } from "../../types/climappTypes";
-import uuid from "react-native-uuid";
 import { saveLocationsToStorage } from "../../api/LocationService";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home = () => {
   const [user, setUser] = useState<User | null>(null);
   const { session, isGuest } = useAuth();
   const [fetchError, setFetchError] = useState<string | null>(null);
-  const { coordinates, cityInfo, locationErrorMsg, getLocation } =
+  const { coordinates, locationDetails, locationErrorMsg, getLocation } =
     useLocation();
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
@@ -33,35 +34,62 @@ const Home = () => {
       setIsLoadingLocation(true);
 
       try {
-        await getLocation();
+        // get latest loc
+        const { coordinates: newCoords, locationDetails: newGeocode } =
+          await getLocation();
+
         const { data, error } = await supabase.auth.getUser();
         if (error) throw error;
         setUser(data?.user || null);
 
+        //const stored = await AsyncStorage.getItem("locations");
+        //console.log("AsyncStorage before load:", stored);
+
         // load locations
         let savedLocations = (await loadLocations(session.user.id)) || [];
+        console.log("Loaded from loadLocations:", savedLocations);
 
-        // create new saved location object from current location
-        const currentLocation: SavedLocation = {
-          id: uuid.v4(),
-          coordinates: coordinates,
-          cityInfo: cityInfo,
-          locationErrorMsg: null,
-        };
+        if (newCoords) {
+          const currentLocation: SavedLocation = {
+            id: "my_location",
+            coordinates: newCoords,
+            geocode: newGeocode,
+          };
 
-        // reserve first slot for my location
-        if (savedLocations.length > 0) {
-          savedLocations[0] = currentLocation;
-        } else {
-          savedLocations.push(currentLocation);
+          // remove duplicates
+          savedLocations = savedLocations.filter(
+            (loc: any) =>
+              loc.id !== "my_location" &&
+              !(
+                Math.abs(loc.coordinates.latitude - newCoords.latitude) <
+                  0.001 &&
+                Math.abs(loc.coordinates.longitude - newCoords.longitude) <
+                  0.001
+              )
+          );
+          // store new location at the beginning
+          savedLocations.unshift(currentLocation);
+          console.log("After adding currentLocation:", savedLocations);
+
+          // max 5 rule
+          if (savedLocations.length > 5) {
+            savedLocations = savedLocations.slice(0, 5);
+          }
+          console.log("Final savedLocations:", savedLocations);
+
+          console.log(`Saving to local: ${savedLocations.length}`);
+          // save to local
+          await saveLocationsToStorage(savedLocations);
+
+          console.log(`Syncing to Supabase: ${savedLocations.length}`);
+          // sync to supabase
+          await syncLocationsToSupabase(session.user.id);
+
+          console.log("Updated saved locations:", savedLocations);
+
+          const checks = await AsyncStorage.getItem("locations");
+          console.log("local data: ", checks);
         }
-
-        // save to local
-        await saveLocationsToStorage(savedLocations);
-        // sync to supabase
-        await syncLocationsToSupabase(session.user.id);
-
-        console.log("Updated saved locations:", savedLocations);
       } catch (error: any) {
         console.error("Error updating locations:", error.message);
       } finally {
@@ -70,7 +98,7 @@ const Home = () => {
     };
 
     fetchUserAndUpdateLocations();
-  }, [session, isGuest, getLocation]);
+  }, [session, isGuest]);
 
   // welcome message
   const welcomeTitle = isGuest
@@ -88,7 +116,7 @@ const Home = () => {
       {isLoadingLocation ? (
         <Text>Loading location...</Text>
       ) : (
-        <Text>Your area | {cityInfo?.city || "Unknown"}</Text>
+        <Text>Your area | {locationDetails?.city || "Unknown"}</Text>
       )}
       <View style={styles.cardWrapper}>
         <Card

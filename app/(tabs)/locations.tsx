@@ -7,7 +7,7 @@ import { Coordinates } from "../../types/climappTypes";
 
 const LocationScreen = () => {
   const { session } = useAuth();
-  const { coordinates, cityInfo, locationErrorMsg, getLocation } =
+  const { coordinates, locationDetails, locationErrorMsg, getLocation } =
     useLocation();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -38,7 +38,7 @@ const LocationScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text>Welcome, {session.user.user_metadata.display_name}!</Text>
+      {/* <Text>Welcome, {session.user.user_metadata.display_name}!</Text>
       <Text>Your current location:</Text>
       {locationErrorMsg ? (
         <Text style={{ color: "red" }}>{locationErrorMsg}</Text>
@@ -50,7 +50,7 @@ const LocationScreen = () => {
             Coordinates: {coordinates?.latitude}, {coordinates?.longitude}
           </Text>
         </>
-      )}
+      )} */}
       <MapScreen
         coords={coordinates}
         onLocationChange={(newCoords: Coordinates) => {

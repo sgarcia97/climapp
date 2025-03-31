@@ -123,8 +123,50 @@ const styles = StyleSheet.create({
   },
   mapButtonText: {
     color: "white",
-    fontSize: 16,
+    flexShrink: 1,
     fontWeight: "bold",
+  },
+  mapScrollView: {
+    position: "absolute",
+    top: 10,
+    left: 10,
+    right: 10,
+    maxHeight: 200,
+    zIndex: 1,
+  },
+  pinDefault: {
+    padding: 10,
+    borderRadius: 20,
+    marginVertical: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  pinGreen: {
+    backgroundColor: "#4CAF50",
+  },
+  pinRed: {
+    backgroundColor: "#2196F3",
+  },
+  mapButtonDefault: {
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "auto",
+    minWidth: 180,
+    maxWidth: "100%",
+  },
+  mapButtonGreen: {
+    backgroundColor: "#4CAF50",
+  },
+  mapButtonRed: {
+    backgroundColor: "#2196F3",
+  },
+  mapButtonMR: {
+    marginRight: 10,
   },
 });
 

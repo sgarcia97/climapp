@@ -2,9 +2,10 @@ import {
   Coordinates,
   GeocodeResult,
   SavedLocation,
+  MapScreenProps,
 } from "../types/climappTypes";
-import { MapScreenProps } from "../types/climappTypes";
-import { useState, useEffect } from "react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useState, useEffect, useRef } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useLocation } from "../utils/Location";
@@ -13,8 +14,11 @@ import styles from "../styles/styles";
 import {
   saveLocationsToStorage,
   loadLocationsFromStorage,
+  syncLocationsToSupabase,
 } from "../api/LocationService";
 import uuid from "react-native-uuid";
+import { useAuth } from "../contexts/AuthContext";
+import PinList from "./PinList";
 
 const PIN_LIMIT: number = 5;
 
@@ -23,97 +27,105 @@ const MapScreen = ({ coords, onLocationChange }: MapScreenProps) => {
     useState<Coordinates | null>(coords);
   const [pins, setPins] = useState<Coordinates[]>([]);
   const [pinTitles, setPinTitles] = useState<string[]>([]);
+  const mapRef = useRef<MapView>(null);
+  const { session } = useAuth();
 
-  const { coordinates, getLocation, cityInfo } = useLocation(
+  const { coordinates, getLocation, locationDetails } = useLocation(
     coords ? coords : undefined
   );
 
   useEffect(() => {
-    if (coordinates) {
-      setSelectedCoordinates(coordinates);
-      // my location
-      if (pins.length === 0) {
+    const loadSavedPins = async () => {
+      const savedLocations = (await loadLocationsFromStorage()) || [];
+      console.log("Loaded saved locations from AsyncStorage:", savedLocations);
+
+      const savedPins: Coordinates[] = savedLocations
+        .filter((loc) => loc.coordinates != null)
+        .map((loc) => loc.coordinates as Coordinates);
+
+      if (savedPins.length > 0) {
+        setPins(savedPins);
+      } else if (coordinates) {
         setPins([coordinates]);
       }
-    }
+    };
+
+    loadSavedPins();
   }, [coordinates]);
 
   useEffect(() => {
+    if (coordinates) {
+      setSelectedCoordinates(coordinates);
+    }
+
     const fetchPinTitles = async () => {
       const newPinTitles: string[] = [];
-
       let newLocations: SavedLocation[] = [];
 
       const currentSavedLocations: SavedLocation[] =
         (await loadLocationsFromStorage()) || [];
-      // save first slot (if changed)
-      if (
-        currentSavedLocations[0].coordinates?.latitude !=
-          coordinates?.latitude &&
-        currentSavedLocations[0].coordinates?.longitude !=
-          coordinates?.longitude
-      ) {
-        // create new saved location object from current location
+
+      // my_location
+      if (coordinates) {
         const currentLocation: SavedLocation = {
-          id: uuid.v4(),
+          id: "my_location",
           coordinates: coordinates,
-          cityInfo: cityInfo,
-          locationErrorMsg: null,
+          geocode: locationDetails || currentSavedLocations[0]?.geocode,
         };
+
         newLocations.push(currentLocation);
+        newPinTitles.push(currentLocation.geocode?.city || "Your Location");
       }
 
-      for (let p of pins) {
-        if (p === pins[0] && cityInfo?.city) {
-          newPinTitles.push(cityInfo.city);
-        } else {
-          const geocode = await Location.reverseGeocodeAsync({
-            latitude: p.latitude,
-            longitude: p.longitude,
-          });
-          newPinTitles.push(
-            geocode.length > 0 ? (geocode[0].city ?? "Unknown") : "Unknown"
-          );
-          // start create a new SavedLocation
-          const newCoords: Coordinates = {
-            latitude: p.latitude,
-            longitude: p.longitude,
-          };
+      // other pins
+      for (let i = 1; i < pins.length; i++) {
+        const p = pins[i];
 
-          const newCityInfo: GeocodeResult = {
-            city: geocode[0].city,
-            country: geocode[0].country,
-            street: geocode[0].street,
-            region: geocode[0].region,
-          };
+        const geocode = await Location.reverseGeocodeAsync({
+          latitude: p.latitude,
+          longitude: p.longitude,
+        }).catch((error) => {
+          console.error("Could not get location details failed", error);
+          return [];
+        });
 
-          const currentLocation: SavedLocation = {
-            id: uuid.v4(),
-            coordinates: newCoords,
-            cityInfo: newCityInfo,
-            locationErrorMsg: null,
-          };
-          // store pins for saving
-          newLocations.push(currentLocation);
-        }
+        const title =
+          geocode.length > 0 ? (geocode[0].city ?? "Unknown") : "Unknown";
+        newPinTitles.push(title);
+
+        const newCoords: Coordinates = {
+          latitude: p.latitude,
+          longitude: p.longitude,
+        };
+
+        const newGeocode: GeocodeResult = geocode[0]
+          ? {
+              city: geocode[0]?.city,
+              country: geocode[0]?.country,
+              street: geocode[0]?.street,
+              region: geocode[0]?.region,
+              postalCode: geocode[0]?.postalCode,
+              formattedAddress: geocode[0]?.formattedAddress,
+            }
+          : {};
+
+        newLocations.push({
+          id: uuid.v4() as string,
+          coordinates: newCoords,
+          geocode: newGeocode,
+        });
       }
+
       setPinTitles(newPinTitles);
-      // save to local
-      console.log(
-        `# of new locations = ${newLocations.length} pins = ${pins.length}`
-      );
-      for (let s of newLocations) {
-        console.log(
-          `saving ${s.coordinates?.latitude},${s.coordinates?.longitude}`
-        );
-      }
+
+      console.log(`Saving locations:`, newLocations);
       await saveLocationsToStorage(newLocations);
     };
 
     if (pins.length > 0) {
       fetchPinTitles();
     }
-  }, [pins]);
+  }, [pins, coordinates, locationDetails]);
 
   const handleMapPress = (event: any) => {
     const newCoordinates = event.nativeEvent.coordinate;
@@ -128,16 +140,31 @@ const MapScreen = ({ coords, onLocationChange }: MapScreenProps) => {
   const handleRemovePin = (index: number) => {
     if (index > 0) {
       setPins(pins.filter((_, i) => i !== index));
+      setPinTitles(pinTitles.filter((_, i) => i !== index));
     }
   };
 
   const handleSyncLocation = () => {
-    getLocation();
+    if (session) {
+      syncLocationsToSupabase(session.user.id);
+    }
+  };
+
+  const goToPin = (coordinates: Coordinates) => {
+    if (mapRef.current) {
+      mapRef.current.animateToRegion({
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+    }
   };
 
   return (
     <View style={styles.mapContainer}>
       <MapView
+        ref={mapRef}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={{
@@ -151,7 +178,8 @@ const MapScreen = ({ coords, onLocationChange }: MapScreenProps) => {
         {pins[0] && (
           <Marker
             coordinate={pins[0]}
-            title={cityInfo?.city || "Your Location"}
+            title={locationDetails?.city || "Your Location"}
+            pinColor="green"
           />
         )}
 
@@ -164,9 +192,14 @@ const MapScreen = ({ coords, onLocationChange }: MapScreenProps) => {
           />
         ))}
       </MapView>
-
+      <PinList
+        pins={pins}
+        goToPin={goToPin}
+        handleRemovePin={handleRemovePin}
+        pinTitles={pinTitles}
+      ></PinList>
       <TouchableOpacity style={styles.mapButton} onPress={handleSyncLocation}>
-        <Text style={styles.mapButtonText}>Sync Location</Text>
+        <Text style={styles.mapButtonText}>Sync Locations</Text>
       </TouchableOpacity>
     </View>
   );
