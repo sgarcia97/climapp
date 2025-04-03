@@ -4,7 +4,7 @@ import styles from '../styles/styles'
 type CardProps = {
     title:string;
     img:any;
-    val:string;
+    val:any;
 }
 const Card = ({title, img, val}:CardProps) => {
     const req = '../assets/'+img

@@ -45,17 +45,78 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   cardWrapper: {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 15,
+    display:"flex",
+    flexDirection:"row",
+    justifyContent:"center",
+    flexWrap:"wrap",
+    gap:10,
     paddingBlock: 10,
   },
   card: {
     backgroundColor: "#fff",
     borderRadius: 10,
-    width: "47%",
+    minWidth:"48%",
     boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
+  },
+  cardBig:{
+    boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
+    backgroundColor:"#ffffff",
+    borderRadius:10,
+    padding:20,
+    display:"flex",
+    flexDirection:"row",
+    alignItems:"center",
+    gap:15
+  },
+  cardSectionLeft:{
+    
+  },
+  cardSectionRight:{
+    
+  },
+  smallIcon:{
+    width:20,
+    height:20
+  },
+  bigIcon:{
+    width:50,
+    height:50,
+  },
+  subtitle:{
+    fontWeight:600
+  },
+  dayWrapper:{
+    flex:1,
+    gap:5
+
+  },
+  day:{
+    boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
+    padding:10,
+    borderRadius:5,
+    backgroundColor:"#fff",
+    display:"flex",
+    flexDirection:"row",
+    alignItems:"center",
+    justifyContent:"space-between",
+    gap:10
+  },
+  dayTitleWrapper:{
+    display:"flex",
+    flexDirection:"row",
+    gap:5
+  },
+  dayTitle:{
+    fontWeight:600,
+    fontSize:16,
+    width:45
+  },
+  bold:{
+    fontWeight:600
+  },
+  cardSectionTitle:{
+    fontSize:60,
+    fontWeight:600
   },
   cardImage: {
     width: 15,
@@ -83,7 +144,16 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#ddd",
+  },
+  searchInput: {
+    backgroundColor: "#fff",
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    marginTop:20
   },
   templateContainer: {
     flexGrow: 1,

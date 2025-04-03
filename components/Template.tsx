@@ -11,10 +11,10 @@ const Template = ({
   return (
     <ScrollView
       style={styles.mainView}
-      contentContainerStyle={[
-        styles.templateContainer,
-        vCentered && styles.mainViewVCentered,
-      ]}
+      //contentContainerStyle={[
+        //styles.templateContainer,
+       // vCentered && styles.mainViewVCentered,
+     // ]}
     >
       {title ? (
         <View style={[styles.titleWrapper, topGuard && styles.titleTopGuard]}>
