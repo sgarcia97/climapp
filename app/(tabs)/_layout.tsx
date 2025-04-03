@@ -1,8 +1,9 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Tabs } from "expo-router";
+import { Tabs, Stack } from "expo-router";
 
 const TabLayout = () => {
   return (
+
     <Tabs>
       {/* Home Tab */}
       <Tabs.Screen
@@ -50,5 +51,13 @@ const TabLayout = () => {
     </Tabs>
   );
 };
-
+/*
+export const StackLayout = () => {
+  return(
+    <Stack>
+       <Stack.Screen name="details"></Stack.Screen>
+    </Stack>
+  )
+}
+*/
 export default TabLayout;

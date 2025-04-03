@@ -1,4 +1,4 @@
-import { TextInput, View, Text, TouchableHighlight } from 'react-native'
+import { TextInput, View, Text, TouchableHighlight, TouchableOpacity } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useState, useEffect } from 'react'
 import styles from '../styles/styles'
@@ -27,7 +27,7 @@ const Search = () => {
      
                 
                 {data && data.map((item:any,i:number)=>(
-                    <TouchableHighlight key={i}><View ><Text>{item.name}, {item.region}</Text></View></TouchableHighlight>
+                    <TouchableOpacity key={i} onPress={()=>router.navigate(`details/${item.name}`)}><View ><Text>{item.name}, {item.region}</Text></View></TouchableOpacity>
                 ))}
         </View>
     )

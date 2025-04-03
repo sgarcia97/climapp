@@ -11,4 +11,6 @@ const weatherApi = async () => {
 
 }
 
+
+
 export const weather = weatherApi()

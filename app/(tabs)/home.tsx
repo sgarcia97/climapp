@@ -1,4 +1,4 @@
-import { Text, View, ActivityIndicator, Image, TextInput } from "react-native";
+import { Text, View, ActivityIndicator, Image} from "react-native";
 import Search from "../../components/Search"
 import moment from "moment";
 import { supabase } from "../../api/UserApi";
