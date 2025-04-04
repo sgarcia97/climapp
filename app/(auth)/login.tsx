@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import styles from "../../styles/styles";
-import { Text, TextInput, View } from "react-native";
+import { styles } from "../../styles/styles";
+import { ScrollView, Text, TextInput, View } from "react-native";
 import { useRouter } from "expo-router";
 import ClimButton from "../../components/ClimButton";
 import Template from "../../components/Template";
@@ -38,7 +38,9 @@ const Login = () => {
   };
 
   return (
-    <Template title="Welcome to Climapp" vCentered={true} topGuard={true}>
+    <Template vCentered={true} topGuard={true}>
+      <View style={styles.staticView}>
+      <View style={[styles.titleWrapper]}><Text style={[styles.title, styles.center]}>Welcome to Climapp</Text></View>
       {errorMessage ? (
         <Text style={styles.errorText}>{errorMessage}</Text>
       ) : null}
@@ -58,10 +60,11 @@ const Login = () => {
         secureTextEntry
         autoCapitalize="none"
       />
-      <ClimButton title="LOGIN" color="black" onClick={handleSignIn} />
-      <ClimButton title="Sign Up" onClick={handleSignUp} />
+      <ClimButton title="LOGIN" color="#0023C4" onClick={handleSignIn} />
+      <ClimButton title="Sign Up" color="#FF5CF3" onClick={handleSignUp} />
       <ClimButton title="Guest" onClick={handleGuest} />
       <StatusBar style="auto" />
+      </View>
     </Template>
   );
 };

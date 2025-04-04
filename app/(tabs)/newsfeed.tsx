@@ -2,14 +2,16 @@ import { useState, useEffect } from "react";
 import {
   View,
   Text,
-  ScrollView,
   ActivityIndicator,
   Alert,
   Linking,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from "react-native";
 import Template from "../../components/Template";
+import Spacer from "../../components/Spacer";
+import { styles } from "../../styles/styles"
 
 const API_KEY = "4Vq7ZdRNJ5XJQnSrOTZoHP58tG48XJmrkwV1H9N0";
 const COUNTRY = "ca";
@@ -50,7 +52,9 @@ const NewsFeed = () => {
 
   return (
     <Template title="Top News">
-      <ScrollView contentContainerStyle={{ padding: 16 }}>
+   <ScrollView style={styles.scrView}>
+    <View style={styles.mainView}>
+    <View style={[styles.titleWrapper]}><Text style={styles.title}>News</Text></View>
         {loading && page === 1 ? (
           <ActivityIndicator size="large" color="blue" />
         ) : articles.length > 0 ? (
@@ -61,7 +65,6 @@ const NewsFeed = () => {
                 onPress={() => Linking.openURL(article.url)}
                 style={{
                   flexDirection: "row",
-                  marginBottom: 16,
                   backgroundColor: "#fff",
                   borderRadius: 10,
                   overflow: "hidden",
@@ -128,7 +131,9 @@ const NewsFeed = () => {
         ) : (
           <Text>No news articles available.</Text>
         )}
-      </ScrollView>
+        <Spacer/>
+        </View>
+ </ScrollView>
     </Template>
   );
 };

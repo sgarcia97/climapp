@@ -10,7 +10,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useLocation } from "../utils/Location";
 import * as Location from "expo-location";
-import styles from "../styles/styles";
+import { styles } from "../styles/styles";
 import {
   saveLocationsToStorage,
   loadLocationsFromStorage,

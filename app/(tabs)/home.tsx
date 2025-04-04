@@ -1,28 +1,33 @@
-import { Text, View, ActivityIndicator, Image, TextInput } from "react-native";
+import { Text, View, ActivityIndicator, Image, ScrollView, RefreshControl} from "react-native";
 import Search from "../../components/Search"
 import moment from "moment";
 import { supabase } from "../../api/UserApi";
-import styles from "../../styles/styles";
+import { styles } from "../../styles/styles";
 import Template from "../../components/Template";
+import Day from "../../components/Day";
+import Hour from "../../components/Hour";
 import Card from "../../components/Card";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { User } from "@supabase/supabase-js";
 import { useAuth } from "../../contexts/AuthContext";
 import { useLocation } from "../../utils/Location";
+import Spacer from "../../components/Spacer";
 import {
   loadLocations,
   syncLocationsToSupabase,
 } from "../../api/LocationService";
 import { SavedLocation } from "../../types/climappTypes";
 import { saveLocationsToStorage } from "../../api/LocationService";
-import { weather } from "../../api/WeatherApi"
+import { weather, astro } from "../../api/WeatherApi"
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [refreshing, setRefreshing] = useState<boolean>(false)
   const { session, isGuest } = useAuth();
   const [data, setData] = useState<any>(null)
+  const [adata, setAdata] = useState<any>(null)
   const [fetchError, setFetchError] = useState<string | null>(null);
   const { coordinates, locationDetails, locationErrorMsg, getLocation } =
     useLocation();
@@ -31,8 +36,10 @@ const Home = () => {
  
   useEffect(()=>{
     weather.then(dat => setData(dat))
+    astro.then(ast => setAdata(ast) )
   },[])
   
+  console.log('test',adata)
   useEffect(() => {
     const fetchUserAndUpdateLocations = async () => {
       if (isGuest || !session) {
@@ -116,10 +123,24 @@ const Home = () => {
       ? `Welcome, ${user.user_metadata.display_name || user.email}`
       : "Welcome";
 
+  // Pull to Refresh content
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    weather.then(dat => setData(dat))
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+      }, []);
+
   // Weather data
   if(!data){ return <ActivityIndicator/>}
   return (
-    <Template >
+    <Template>  
+      <ScrollView style={styles.scrView} refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
+            <View style={styles.mainView}>
+      <View style={[styles.titleWrapper]}><Text style={styles.title}>Welcome</Text></View>
       <Search/>
       {fetchError && <Text style={styles.errorText}>{fetchError}</Text>}
       {locationErrorMsg && (
@@ -129,32 +150,47 @@ const Home = () => {
         <Text>Loading location...</Text>
       ) : (
         
-        <View><Text>Your area | {/*locationDetails?.city || "Unknown"*/data.location.name}</Text><Text style={{color:"#999999"}}>Last updated {moment(data.last_updated).format('ddd MMM d [at] h:mma')}</Text></View>
+        <View><Text>Your area | {/*locationDetails?.city || "Unknown"*/data.location.name}</Text><Text style={{color:"#999999"}}>Last updated {moment(data.current.last_updated).format('ddd MMM d [at] h:mma')}</Text></View>
       )}
       <View><Text style={styles.subtitle}>Today's Weather</Text></View>
       <View style={styles.cardBig}>
       <Image style={styles.bigIcon} source={require('../../assets/weather/temperature.png')}/>
-        <View style={styles.cardSectionLeft}><Text style={styles.cardSectionTitle}>{Math.round(data.current.temp_c)}</Text></View>
+        <View style={styles.cardSectionLeft}><Text style={styles.cardSectionTitle}>{Math.round(data.current.temp_c)+'\u00B0'}</Text></View>
         <View 
         style={styles.cardSectionRight}>
-          <Text>Real feel <Text style={styles.bold}>{Math.round(data.current.feelslike_c)}</Text></Text>
-          <Text>Wind Chill <Text style={styles.bold}>{Math.round(data.current.windchill_c)}</Text></Text>
+          <Text>Real feel <Text style={styles.bold}>{Math.round(data.current.feelslike_c)+'\u00B0'}</Text></Text>
+          <Text>Wind Chill <Text style={styles.bold}>{Math.round(data.current.windchill_c)+'\u00B0'}</Text></Text>
           <Text style={styles.bold}>{data.current.condition.text}</Text>
         </View>
       </View>
       <View><Text style={styles.subtitle}>Hourly Forecast</Text></View>
+      </View>
+      
+      <ScrollView horizontal >
+        <View style={styles.hourWrapper}>
+        <Hour date="Now" temp={data.current.temp_c} feel={data.current.feelslike_c} icon=""/>
+      {
+        data.forecast.forecastday.map((item:any,i:number)=>(
+          
+          item.hour.map((h:any,i:number)=>{
+            const cd = moment(data.current.last_updated).format('YYYY-MM-DD HH:mm')
+            const wd = moment(h.time).format('YYYY-MM-DD HH:mm')
+   
+            if(wd > cd){
+            return <Hour key={i} date={moment(h.time).format('ha')} temp={h.temp_c} feel={h.feelslike_c} icon=""/>
+            }
+          })
+        ))
+      }
+      </View>
+      </ScrollView>
+      <View style={styles.mainView}>
       <View><Text style={styles.subtitle}>Daily Forecast</Text></View>
       <View style={styles.dayWrapper}>
         {
           data.forecast.forecastday.map((item:any,i:number)=>(
-            <View key={i} style={styles.day}>
-              <View style={styles.dayTitleWrapper}>
-              <Text style={styles.dayTitle}>{moment(item.date).format('ddd')}</Text>
-              <Image style={styles.smallIcon} source={require('../../assets/weather/summer.png')}/>
-              </View>
-              <Text>{Math.round(item.day.maxtemp_c)}</Text>
-              <Text>{Math.round(item.day.mintemp_c)}</Text>
-            </View>
+            <Day key={i} min={item.day.mintemp_c} max={item.day.maxtemp_c} date={item.date}/>
+            
           ))
         }
       </View>
@@ -169,11 +205,12 @@ const Home = () => {
           img={require("../../assets/humidity.png")}
           val={data.current.humidity+"%"}
         />
+        
         <Card title="UV Index" img={require("../../assets/eye.png")} val={data.current.uv} />
         <Card
-          title="Air Quality"
+          title="Heat Index"
           img={require("../../assets/eye.png")}
-          val="10"
+          val={data.current.heatindex_c}
         />
         <Card
           title="Cloud Cover"
@@ -185,7 +222,38 @@ const Home = () => {
           img={require("../../assets/eye.png")}
           val={data.current.vis_km}
         />
+        <Card
+          title="Pressure"
+          img={require("../../assets/eye.png")}
+          val={data.current.pressure_mb}
+        />
+        <Card
+          title="Wind Speed"
+          img={require("../../assets/eye.png")}
+          val={data.current.wind_kph}
+        />
       </View>
+      <View><Text style={styles.subtitle}>Astronomy Data</Text></View>
+      { adata &&
+   
+      
+        
+        <View style={styles.cardMedium}>
+          <View>
+            <Image source={require('../../assets/weather/first-quarter.png')} style={styles.bigIcon}/>
+            <Text style={{fontSize:18, fontWeight:700, color:"#0000000"}}>{adata.astronomy.astro.moon_phase}</Text></View>
+          <View style={styles.cardMediumSectionWrapper}>
+          <View style={styles.cardMediumSection}><Image source={require('../../assets/weather/sunrise.png')} style={styles.smallIcon}/><Text>Sunrise - {adata.astronomy.astro.sunrise}</Text></View>
+          <View style={styles.cardMediumSection}><Image source={require('../../assets/weather/sunset.png')} style={styles.smallIcon}/><Text>Sunset - {adata.astronomy.astro.sunset}</Text></View>
+          <View style={styles.cardMediumSection}><Image source={require('../../assets/weather/moonrise.png')} style={styles.smallIcon}/><Text>Moonrise - {adata.astronomy.astro.moonrise}</Text></View>
+          <View style={styles.cardMediumSection}><Image source={require('../../assets/weather/moonset.png')} style={styles.smallIcon}/><Text>Moonset - {adata.astronomy.astro.moonset}</Text></View>
+          </View>
+        </View>
+      
+        }
+        <Spacer/>
+      </View>
+      </ScrollView>
     </Template>
   );
 };

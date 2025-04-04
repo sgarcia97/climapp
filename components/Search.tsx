@@ -1,7 +1,7 @@
-import { TextInput, View, Text, TouchableHighlight } from 'react-native'
+import { TextInput, View, Text, TouchableHighlight, TouchableOpacity } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useState, useEffect } from 'react'
-import styles from '../styles/styles'
+import { styles } from '../styles/styles'
 const Search = () => {
     const [search, setSearch] = useState<string>("")
     const [data, setData] = useState<any>(null)
@@ -13,22 +13,20 @@ const Search = () => {
             setData(results)
             }
         }
-  
-
+    
     const handleSearch = (s:string) => {
         setSearch(s)
         searchWeather(s)
     }
-
-    console.log(data)
     return(
-        <View>    
+        <View style={styles.searchWrapper}>    
             <TextInput style={styles.searchInput} placeholder="Search for your city or country" onChangeText={text=>handleSearch(text)}/>
      
-                
+                <View style={styles.searchResultsWrapper}>
                 {data && data.map((item:any,i:number)=>(
-                    <TouchableHighlight key={i}><View ><Text>{item.name}, {item.region}</Text></View></TouchableHighlight>
+                    <TouchableOpacity key={i} onPress={()=>router.navigate(`details/${item.name}`)}><View style={styles.searchResult}><Text>{item.name}, {item.region}</Text></View></TouchableOpacity>
                 ))}
+                </View>
         </View>
     )
 }

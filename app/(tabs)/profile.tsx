@@ -1,7 +1,7 @@
-import { Text, View, Alert, TextInput } from "react-native";
+import { Text, View, Alert, TextInput, ScrollView } from "react-native";
 import Template from "../../components/Template";
 import ClimButton from "../../components/ClimButton";
-import styles from "../../styles/styles";
+import { styles, blue } from "../../styles/styles";
 import { useAuth } from "../../contexts/AuthContext";
 import { updateAuthUser } from "../../api/UserService";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -39,11 +39,14 @@ const Profile = () => {
   };
 
   return (
-    <Template title="Profile">
+    <Template>
+      <ScrollView style={styles.scrView}>
+      <View style={styles.mainView}>
+      <View style={[styles.titleWrapper]}><Text style={styles.title}>Profile</Text></View>
       <View
         style={{ padding: 5, flex: 1, flexDirection: "column", rowGap: 10 }}
       >
-        <Text style={{ fontSize: 18, marginBottom: 20 }}>
+        <Text style={{ fontSize: 16, marginBottom: 20 }}>
           {isGuest ? "You are browsing as a Guest." : `Hello, ${greetingName}`}
         </Text>
         {session ? (
@@ -62,7 +65,7 @@ const Profile = () => {
                 autoCapitalize="none"
               />
             </View>
-            <ClimButton title="Save" color="black" onClick={handleSave} />
+            <ClimButton title="Save" color={blue} onClick={handleSave} />
           </>
         ) : (
           <View></View>
@@ -73,6 +76,8 @@ const Profile = () => {
           onClick={handleLogout}
         />
       </View>
+      </View>
+      </ScrollView>
     </Template>
   );
 };

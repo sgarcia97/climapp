@@ -1,5 +1,5 @@
 import { View, Text, Image } from 'react-native'
-import styles from '../styles/styles'
+import { styles } from '../styles/styles'
 
 type CardProps = {
     title:string;
@@ -7,7 +7,6 @@ type CardProps = {
     val:any;
 }
 const Card = ({title, img, val}:CardProps) => {
-    const req = '../assets/'+img
     return(
         <View style={styles.card}>
             <View style={styles.cardContent}>

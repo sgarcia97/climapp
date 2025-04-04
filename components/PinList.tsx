@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { PinListProps } from "../types/climappTypes";
-import styles from "../styles/styles";
+import { styles } from "../styles/styles";
 
 const PinList = ({
   pins,

@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
-
-const styles = StyleSheet.create({
+export const blue = "#0023C4"
+export const pink = "#FF5CF3"
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
@@ -9,7 +10,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   titleWrapper: {
-    paddingBlock: 20,
+    paddingBlock: 10,
   },
   titleTopGuard: {
     marginTop: 50,
@@ -17,11 +18,24 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    textAlign: "center",
   },
   mainView: {
-    paddingInline: 20,
-    flex: 1,
+    display:"flex",
+    paddingInline:15,
+    paddingTop:10,
+    gap:15
+  },
+  scrView:{
+    
+  },
+  staticView:{
+    display:"flex",
+    flexDirection:"column",
+    gap:10,
+    paddingInline:15,
+    justifyContent:"center",
+    paddingTop:60
+    
   },
   mainViewVCentered: {
     flex: 1,
@@ -43,6 +57,9 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 5,
     textAlign: "center",
+  },
+  center:{
+    textAlign:"center"
   },
   cardWrapper: {
     display:"flex",
@@ -68,27 +85,79 @@ const styles = StyleSheet.create({
     alignItems:"center",
     gap:15
   },
+  cardMedium:{
+    boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
+    backgroundColor:"#ffffff",
+    borderRadius:10,
+    padding:20,
+    display:"flex",
+    flexDirection:"row",
+
+    gap:15
+  },
   cardSectionLeft:{
     
   },
   cardSectionRight:{
     
   },
+  cardMediumSectionWrapper:{
+    display:"flex",
+    flexDirection:"column",
+    gap:10
+  },
+  cardMediumSection:{
+    display:"flex",
+    flexDirection:"row",
+    alignItems:"center",
+    gap:15
+  },
   smallIcon:{
     width:20,
     height:20
+  },
+  mediumIcon:{
+    width:35,
+    height:35,
   },
   bigIcon:{
     width:50,
     height:50,
   },
   subtitle:{
-    fontWeight:600
+    fontWeight:700
+  },
+  hourWrapper:{
+    display:"flex",
+    marginBlock:15,
+    flexDirection:"row",
+    gap:10,
+    paddingLeft:15
+  },
+  hour:{
+    boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
+    padding:10,
+    display:"flex",
+    flexDirection:"column",
+    gap:15,
+    alignItems:"center",
+    backgroundColor:"#fff",
+    borderRadius:5,
+    width:80
+  },
+  hourTemp:{
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center",
+    flexDirection:"row",
+    flexWrap:"nowrap",
+    width:"100%",
+    textAlign:"center",
+    color:"#dddddd"
   },
   dayWrapper:{
     flex:1,
     gap:5
-
   },
   day:{
     boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
@@ -110,6 +179,21 @@ const styles = StyleSheet.create({
     fontWeight:600,
     fontSize:16,
     width:45
+  },
+  searchWrapper:{
+    position:"relative"
+  },
+  searchResultsWrapper:{
+    position:"absolute",
+    width:"100%",
+    top:"105%",
+    backgroundColor:"#fff",
+    zIndex:2,
+    borderRadius:5,
+    boxShadow:"0 1 10 0 rgba(50,50,50,0.1)"
+  },
+  searchResult:{
+    padding:15
   },
   bold:{
     fontWeight:600
@@ -153,7 +237,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#ddd",
-    marginTop:20
   },
   templateContainer: {
     flexGrow: 1,
@@ -240,4 +323,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default styles;
+

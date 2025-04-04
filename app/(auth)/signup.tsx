@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { TextInput, Alert } from "react-native";
+import { TextInput, Alert, ScrollView, View, Text } from "react-native";
 import ClimButton from "../../components/ClimButton";
 import Template from "../../components/Template";
-import styles from "../../styles/styles";
+import { styles } from "../../styles/styles";
 import { useAuth } from "../../contexts/AuthContext";
 import { useRouter } from "expo-router";
 import { AuthError } from "@supabase/supabase-js";
@@ -97,6 +97,9 @@ const SignUp = () => {
 
   return (
     <Template title="Sign Up" vCentered={true}>
+      <ScrollView style={styles.scrView}>
+        <View style={styles.staticView}>
+          <View style={[styles.titleWrapper]}><Text style={[styles.title, styles.center]}>Sign Up to Climapp</Text></View>
       <TextInput
         placeholder="Display Name (optional)"
         style={styles.defaultInput}
@@ -129,6 +132,8 @@ const SignUp = () => {
         value={confirmPassword}
       />
       <ClimButton title="SIGN UP" color="blue" onClick={handleSignUp} />
+      </View>
+      </ScrollView>
     </Template>
   );
 };
