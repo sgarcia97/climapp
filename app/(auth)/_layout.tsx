@@ -1,5 +1,6 @@
 import { Stack, Redirect } from "expo-router";
 import { useAuth } from "../../contexts/AuthContext";
+import { blue } from "../../styles/styles"
 
 export default function AuthLayout() {
   const { session, isGuest } = useAuth();
@@ -10,9 +11,21 @@ export default function AuthLayout() {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="login" />
-      <Stack.Screen name="signup" options={{ title: "Sign Up" }} />
+    <Stack >
+      <Stack.Screen name="login" options={{
+        headerShown:false,
+        headerTitle:"Login"
+      }}/>
+      <Stack.Screen name="signup" options={{ 
+        title: "Sign Up", 
+        headerStyle:{
+          backgroundColor:blue,
+          
+        },
+        headerTitleStyle:{
+          color:"#fff"
+        }
+        }} />
       <Stack.Screen
         name="email-confirm"
         options={{ title: "Sign up Successful" }}
