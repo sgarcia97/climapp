@@ -11,14 +11,14 @@ import {
 } from "react-native";
 import Template from "../../components/Template";
 import Spacer from "../../components/Spacer";
-import { styles } from "../../styles/styles";
+import { styles, blue } from "../../styles/styles"; // ✅ Keep blue
 import { loadLocationsFromStorage } from "../../api/LocationService";
 import { getProvinceFromCoords } from "../../utils/getProvinceFromCoords";
-import { XMLParser } from "fast-xml-parser";
+import { XMLParser } from "fast-xml-parser"; // ✅ Keep parser
 
 const API_KEY = "4Vq7ZdRNJ5XJQnSrOTZoHP58tG48XJmrkwV1H9N0";
 const COUNTRY = "ca";
-const MAX_PAGES = 3;
+const MAX_PAGES = 10;
 const ARTICLES_PER_PAGE = 12;
 
 const NewsFeed = () => {
@@ -122,7 +122,7 @@ const NewsFeed = () => {
           </View>
 
           {loading && page === 1 ? (
-            <ActivityIndicator size="large" color="blue" />
+            <ActivityIndicator size="large" color={blue} />
           ) : articles.length > 0 ? (
             <>
               {articles.map((article, index) => (
@@ -191,7 +191,7 @@ const NewsFeed = () => {
               )}
 
               {loading && page > 1 && (
-                <ActivityIndicator size="small" color="blue" style={{ marginTop: 10 }} />
+                <ActivityIndicator size="small" color={blue} style={{ marginTop: 10 }} />
               )}
             </>
           ) : (
