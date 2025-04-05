@@ -2,24 +2,27 @@ import { Text, View, ActivityIndicator, Image, ScrollView, RefreshControl} from 
 import Search from "../../components/Search"
 import moment from "moment";
 import { supabase } from "../../api/UserApi";
-import { styles } from "../../styles/styles";
+import { styles, pink, blue } from "../../styles/styles";
 import Template from "../../components/Template";
 import Day from "../../components/Day";
 import Hour from "../../components/Hour";
 import Card from "../../components/Card";
+import Subtitle from "../../components/Subtitle";
+import { Title, Paragraph } from "../../components/Title";
 import { useState, useEffect, useCallback } from "react";
 import { User } from "@supabase/supabase-js";
 import { useAuth } from "../../contexts/AuthContext";
 import { useLocation } from "../../utils/Location";
 import Spacer from "../../components/Spacer";
+import { weatherIcons } from "../../components/WeatherIcons";
 import {
   loadLocations,
   syncLocationsToSupabase,
 } from "../../api/LocationService";
 import { SavedLocation } from "../../types/climappTypes";
 import { saveLocationsToStorage } from "../../api/LocationService";
-import { weather, astro } from "../../api/WeatherApi"
-
+import { weatherApi, astronomyApi, marineApi } from "../../api/WeatherApi"
+import clothing from "../../api/ClothingApi"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home = () => {
@@ -28,20 +31,16 @@ const Home = () => {
   const { session, isGuest } = useAuth();
   const [data, setData] = useState<any>(null)
   const [adata, setAdata] = useState<any>(null)
+  const [mdata, setMdata] = useState<any>(null)
   const [fetchError, setFetchError] = useState<string | null>(null);
   const { coordinates, locationDetails, locationErrorMsg, getLocation } =
     useLocation();
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
-  
- 
-  useEffect(()=>{
-    weather.then(dat => setData(dat))
-    astro.then(ast => setAdata(ast) )
-  },[])
-  
-  console.log('test',adata)
+
   useEffect(() => {
     const fetchUserAndUpdateLocations = async () => {
+      const { coordinates: newCoords, locationDetails: newGeocode } =
+          await getLocation();
       if (isGuest || !session) {
         setUser(null);
         return;
@@ -51,8 +50,7 @@ const Home = () => {
 
       try {
         // get latest loc
-        const { coordinates: newCoords, locationDetails: newGeocode } =
-          await getLocation();
+        
 
         const { data, error } = await supabase.auth.getUser();
         if (error) throw error;
@@ -63,7 +61,7 @@ const Home = () => {
 
         // load locations
         let savedLocations = (await loadLocations(session.user.id)) || [];
-        console.log("Loaded from loadLocations:", savedLocations);
+        //console.log("Loaded from loadLocations:", savedLocations);
 
         if (newCoords) {
           const currentLocation: SavedLocation = {
@@ -85,29 +83,29 @@ const Home = () => {
           );
           // store new location at the beginning
           savedLocations.unshift(currentLocation);
-          console.log("After adding currentLocation:", savedLocations);
+          //console.log("After adding currentLocation:", savedLocations);
 
           // max 5 rule
           if (savedLocations.length > 5) {
             savedLocations = savedLocations.slice(0, 5);
           }
-          console.log("Final savedLocations:", savedLocations);
+          //console.log("Final savedLocations:", savedLocations);
 
-          console.log(`Saving to local: ${savedLocations.length}`);
+          //console.log(`Saving to local: ${savedLocations.length}`);
           // save to local
           await saveLocationsToStorage(savedLocations);
 
-          console.log(`Syncing to Supabase: ${savedLocations.length}`);
+          //console.log(`Syncing to Supabase: ${savedLocations.length}`);
           // sync to supabase
           await syncLocationsToSupabase(session.user.id);
 
-          console.log("Updated saved locations:", savedLocations);
+          //console.log("Updated saved locations:", savedLocations);
 
           const checks = await AsyncStorage.getItem("locations");
-          console.log("local data: ", checks);
+          //console.log("local data: ", checks);
         }
       } catch (error: any) {
-        console.error("Error updating locations:", error.message);
+        //console.error("Error updating locations:", error.message);
       } finally {
         setIsLoadingLocation(false);
       }
@@ -115,6 +113,14 @@ const Home = () => {
 
     fetchUserAndUpdateLocations();
   }, [session, isGuest]);
+
+  const q = coordinates ? coordinates.latitude+','+coordinates.longitude : 'auto:ip'
+
+  useEffect(()=>{
+    weatherApi(q).then(dat => setData(dat))
+    astronomyApi(q).then(ast => setAdata(ast))
+    marineApi(q).then(ast => setMdata(ast))
+  },[])
 
   // welcome message
   const welcomeTitle = isGuest
@@ -126,21 +132,30 @@ const Home = () => {
   // Pull to Refresh content
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    weather.then(dat => setData(dat))
+    weatherApi(q).then(dat => {setData(dat)})
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
       }, []);
-
+  
+  console.log('Marine',mdata)
   // Weather data
-  if(!data){ return <ActivityIndicator/>}
+  if(!data){ return <View style={{flex:1,padding:30}}><ActivityIndicator color={blue}/></View>}
+  const id = 1//data && data.current.is_day
+  const ico = weatherIcons.find((i)=>{
+    return i.code === data.current.condition.code
+  })
+  const cl = clothing.find((i)=>{
+    return (Math.round(data.current.feelslike_c) <= i.temphigh && Math.round(data.current.feelslike_c) >= i.templow )
+  })
+
   return (
-    <Template>  
+    <Template isDay={id}>  
       <ScrollView style={styles.scrView} refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
             <View style={styles.mainView}>
-      <View style={[styles.titleWrapper]}><Text style={styles.title}>Welcome</Text></View>
+            <Title title={welcomeTitle} isDay={id}/>
       <Search/>
       {fetchError && <Text style={styles.errorText}>{fetchError}</Text>}
       {locationErrorMsg && (
@@ -149,12 +164,15 @@ const Home = () => {
       {isLoadingLocation ? (
         <Text>Loading location...</Text>
       ) : (
-        
-        <View><Text>Your area | {/*locationDetails?.city || "Unknown"*/data.location.name}</Text><Text style={{color:"#999999"}}>Last updated {moment(data.current.last_updated).format('ddd MMM d [at] h:mma')}</Text></View>
+        <View>
+        <View style={{display:"flex", flexDirection:"row", gap:5}}><Image style={{width:15, height:15}}source={require('../../assets/location.png')}/><Paragraph title={`${data.location.name} | ${locationDetails?.street}, ${locationDetails?.city}`} isDay={id}/></View>
+        <Text style={{color:"#999999"}}>Last updated {moment(data.current.last_updated).format('ddd MMM d [at] h:mma')}</Text></View>
+   
       )}
-      <View><Text style={styles.subtitle}>Today's Weather</Text></View>
+      <Subtitle title="Today's Weather" isDay={id}/>
       <View style={styles.cardBig}>
-      <Image style={styles.bigIcon} source={require('../../assets/weather/temperature.png')}/>
+        <View style={styles.cardBigSection}>
+      <Image style={styles.bigIcon} source={{ uri:data.current.is_day == 1 ? ico?.icon : ico?.iconn}}/>
         <View style={styles.cardSectionLeft}><Text style={styles.cardSectionTitle}>{Math.round(data.current.temp_c)+'\u00B0'}</Text></View>
         <View 
         style={styles.cardSectionRight}>
@@ -162,22 +180,29 @@ const Home = () => {
           <Text>Wind Chill <Text style={styles.bold}>{Math.round(data.current.windchill_c)+'\u00B0'}</Text></Text>
           <Text style={styles.bold}>{data.current.condition.text}</Text>
         </View>
+        </View>
+        <View><Text style={{fontWeight:400, textAlign:"center", fontSize:16}}>The weather is currently <Text style={styles.boldBlue}>{ cl?.title}</Text></Text>    
+        </View>
       </View>
-      <View><Text style={styles.subtitle}>Hourly Forecast</Text></View>
+      
+      <Subtitle title="Hourly Forecast" isDay={id}/>
       </View>
       
       <ScrollView horizontal >
         <View style={styles.hourWrapper}>
-        <Hour date="Now" temp={data.current.temp_c} feel={data.current.feelslike_c} icon=""/>
+        <Hour date="Now" img={data.is_day == 1 ? ico?.icon : ico?.iconn} temp={data.current.temp_c} condition={data.current.condition.text} feel={data.current.feelslike_c} />
       {
         data.forecast.forecastday.map((item:any,i:number)=>(
           
           item.hour.map((h:any,i:number)=>{
+            const icon = weatherIcons.find((i)=>{
+              return i.code === h.condition.code
+            })
             const cd = moment(data.current.last_updated).format('YYYY-MM-DD HH:mm')
             const wd = moment(h.time).format('YYYY-MM-DD HH:mm')
    
             if(wd > cd){
-            return <Hour key={i} date={moment(h.time).format('ha')} temp={h.temp_c} feel={h.feelslike_c} icon=""/>
+            return <Hour key={i} img={h.is_day == 1 ? icon?.icon : icon?.iconn } date={moment(h.time).format('h A')} temp={h.temp_c} feel={h.feelslike_c} condition={h.condition.text}/>
             }
           })
         ))
@@ -185,62 +210,95 @@ const Home = () => {
       </View>
       </ScrollView>
       <View style={styles.mainView}>
-      <View><Text style={styles.subtitle}>Daily Forecast</Text></View>
+      <Subtitle title="Clothing Recommendations" isDay={id}/>
+      <View style={styles.cardBig}>
+        <View style={styles.clothrec}><View style={styles.clothsect}><Image style={styles.mediumIcon} source={require('../../assets/tshirt.png')}/><Text style={styles.boldBlue}>Shirt</Text></View> 
+        <Text>{cl?.shirt}</Text></View>
+        <View style={styles.clothrec}><View style={styles.clothsect}><Image style={styles.mediumIcon} source={require('../../assets/jeans.png')}/><Text style={styles.boldBlue}>Pants</Text></View>
+        <Text>{cl?.pants}</Text></View>
+        <View style={styles.clothrec}><View style={styles.clothsect}><Image style={styles.mediumIcon} source={require('../../assets/sneaker.png')}/><Text style={styles.boldBlue}>Shoes</Text></View>
+        <Text>{cl?.shoes}</Text></View>
+        <View style={styles.clothrec}><View style={styles.clothsect}><Image style={styles.mediumIcon} source={require('../../assets/varsity-jacket.png')}/><Text style={styles.boldBlue}>Overalls</Text></View> 
+        <Text>{cl?.top}</Text></View>
+        <View style={styles.clothrec}><View style={styles.clothsect}><Image style={styles.mediumIcon} source={require('../../assets/winter-gloves.png')}/><Text style={styles.boldBlue}>Accesories</Text></View> 
+        <Text>{cl?.acc}</Text></View>
+      </View>
+      <Subtitle title="What's the next week looking like" isDay={id}/>
       <View style={styles.dayWrapper}>
         {
-          data.forecast.forecastday.map((item:any,i:number)=>(
-            <Day key={i} min={item.day.mintemp_c} max={item.day.maxtemp_c} date={item.date}/>
-            
-          ))
+         
+          data.forecast.forecastday.map((item:any,i:number)=>{
+            const icon = weatherIcons.find((i)=>{
+              return i.code === item.day.condition.code
+            })
+            return <Day 
+              key={i}
+              img={icon?.icon}
+              min={item.day.mintemp_c} 
+              max={item.day.maxtemp_c} 
+              date={item.date}
+              isDay={id}
+              condition={item.day.condition.text}
+              />
+})
         }
       </View>
       <View style={styles.cardWrapper}>
         <Card
           title="Precipitation"
-          img={require("../../assets/cloud.png")}
+          img={require("../../assets/weather/umbrella.png")}
           val={data.current.precip_mm}
+          isDay={data.current.is_day}
         />
         <Card
           title="Humidity"
-          img={require("../../assets/humidity.png")}
+          img={require("../../assets/weather/humidity.png")}
           val={data.current.humidity+"%"}
+          isDay={data.current.is_day}
         />
         
-        <Card title="UV Index" img={require("../../assets/eye.png")} val={data.current.uv} />
+        <Card 
+          title="UV Index" 
+          img={require("../../assets/ultraviolet.png")} 
+          val={data.current.uv} 
+          isDay={data.current.is_day} 
+        />
         <Card
           title="Heat Index"
-          img={require("../../assets/eye.png")}
+          img={require("../../assets/weather/heat.png")}
           val={data.current.heatindex_c}
+          isDay={data.current.is_day}
         />
         <Card
           title="Cloud Cover"
-          img={require("../../assets/eye.png")}
+          img={require("../../assets/weather/cloudy.png")}
           val={data.current.cloud+'%'}
+          isDay={data.current.is_day}
         />
         <Card
           title="Visibility"
-          img={require("../../assets/eye.png")}
+          img={require("../../assets/visibility.png")}
           val={data.current.vis_km}
+          isDay={data.current.is_day}
         />
         <Card
           title="Pressure"
-          img={require("../../assets/eye.png")}
+          img={require("../../assets/weather/pressure.png")}
           val={data.current.pressure_mb}
+          isDay={data.current.is_day}
         />
         <Card
           title="Wind Speed"
-          img={require("../../assets/eye.png")}
+          img={require("../../assets/weather/windy.png")}
           val={data.current.wind_kph}
+          isDay={data.current.is_day}
         />
       </View>
-      <View><Text style={styles.subtitle}>Astronomy Data</Text></View>
+      <Subtitle title="Look to the Skies" isDay={id}/>
       { adata &&
-   
-      
-        
         <View style={styles.cardMedium}>
           <View>
-            <Image source={require('../../assets/weather/first-quarter.png')} style={styles.bigIcon}/>
+            <Image source={require('../../assets/weather/first-quarter.png')} style={{width:90, height:90}}/>
             <Text style={{fontSize:18, fontWeight:700, color:"#0000000"}}>{adata.astronomy.astro.moon_phase}</Text></View>
           <View style={styles.cardMediumSectionWrapper}>
           <View style={styles.cardMediumSection}><Image source={require('../../assets/weather/sunrise.png')} style={styles.smallIcon}/><Text>Sunrise - {adata.astronomy.astro.sunrise}</Text></View>
@@ -251,6 +309,24 @@ const Home = () => {
         </View>
       
         }
+        <Subtitle title="Sail the Seas" isDay={id}/>
+        <View style={styles.cardBig}>
+        { mdata && 
+
+        mdata.forecast.forecastday[0].day.tides[0].tide.map((t:any,i:number)=>(
+       <View key={i} style={styles.marine}><Image style={styles.mediumIcon} source={ t.tide_type == "HIGH" ? require('../../assets/weather/high-tide.png') : require('../../assets/weather/low-tide.png') }/>
+                  <View>
+                    <Text style={styles.boldBlue}>{t.tide_type} TIDE</Text>
+                    <Text>Height of tide: {t.tide_height_mt} meters</Text>
+                    <Text>Time of tide: {moment(t.tide_time).format('h:mm A')}</Text>
+                  </View>
+                </View>
+        
+        ))
+        
+      
+        }
+        </View>
         <Spacer/>
       </View>
       </ScrollView>

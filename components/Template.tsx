@@ -5,11 +5,18 @@ import { TemplateProps } from "../types/climappTypes";
 const Template = ({
   children,
   title = "",
+  isDay,
   vCentered = false,
   topGuard = false,
 }: TemplateProps) => {
+  let backStyle = null
+  
+    if(isDay == 0){
+        backStyle = styles.backDark
+    }
   return (
-    <SafeAreaView>
+    <SafeAreaView style={backStyle}>
+   
     {/*<ScrollView
       style={styles.mainView}}
       //contentContainerStyle={[
@@ -21,6 +28,7 @@ const Template = ({
 
       <View style={styles.childrenWrapper}>{children}</View>
     {/*</ScrollView>*/}
+
     </SafeAreaView>
   );
 };

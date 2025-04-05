@@ -5,13 +5,20 @@ type CardProps = {
     title:string;
     img:any;
     val:any;
+    isDay:number
 }
-const CardMedium = ({title, img, val}:CardProps) => {
+const CardMedium = ({title, img, val, isDay}:CardProps) => {
+    let backStyle = null
+    let textStyle = null
+    if(isDay == 0){
+        backStyle = styles.backDark
+     
+    }
     return(
-        <View style={styles.cardMedium}>
+        <View style={[styles.cardMedium,backStyle]}>
         <View>
         <Image source={require(img)} style={styles.bigIcon}/>
-        <Text style={{fontSize:18, fontWeight:700, color:"#0000000"}}>{title}</Text></View>
+        <Text style={[styles.title,textStyle]}>{title}</Text></View>
       <View style={styles.cardMediumSectionWrapper}>
       <View style={styles.cardMediumSection}><Image source={require(val.valImg1)} style={styles.smallIcon}/><Text>Sunrise - {val.val1}</Text></View>
       <View style={styles.cardMediumSection}><Image source={require(val.valImg2)} style={styles.smallIcon}/><Text>Sunset - {val.val2}</Text></View>
