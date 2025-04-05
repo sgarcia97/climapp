@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import { styles, blue, pink} from '../styles/styles'
 import moment from 'moment'
 type DayTypes = {
@@ -8,8 +8,9 @@ type DayTypes = {
     isDay:number;
     img:any;
     condition:string;
+    onClick: (value:any) => void
 }
-const Day = ({max, min, date, isDay, img, condition}:DayTypes) => {
+const Day = ({max, min, date, isDay, img, condition, onClick}:DayTypes) => {
     let backStyle = null
     let textStyle = null
     if(isDay == 0){
@@ -17,6 +18,7 @@ const Day = ({max, min, date, isDay, img, condition}:DayTypes) => {
     
     }
     return(
+<TouchableOpacity onPress={onClick}>
         <View style={[styles.day, backStyle]}>
             <View style={styles.dayTitleWrapper}>
             <Text style={[styles.dayTitle, textStyle]}>{moment(date).format('ddd')}</Text>
@@ -28,6 +30,7 @@ const Day = ({max, min, date, isDay, img, condition}:DayTypes) => {
             <Text style={{color:pink, fontWeight:600}}>{Math.round(min)+'\u00B0'}</Text>
             </View>
         </View>
+        </TouchableOpacity>
     )
 }
 
