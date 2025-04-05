@@ -1,6 +1,6 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome6";
 import { Tabs, Stack } from "expo-router";
-import { Text } from 'react-native'
+import { Text, Platform } from 'react-native'
 import { blue, pink, lightblue, styles } from "../../styles/styles"
 const grey = "#707070"
 const TabLayout = () => {
@@ -8,7 +8,9 @@ const TabLayout = () => {
 
     <Tabs screenOptions={{
       tabBarStyle:{
-        backgroundColor:"#CEE1F2"
+        backgroundColor:"#CEE1F2",
+        height: Platform.OS === 'android' ? 80 : 90,
+        paddingTop:5
       },
       headerStyle:{
         backgroundColor:blue

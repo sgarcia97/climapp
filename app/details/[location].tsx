@@ -72,7 +72,7 @@ const Location = () => {
         </View>
         </View>
         <View><Text style={{fontWeight:
-          400, textAlign:"center", fontSize:16}}>The weather is currently <Text style={styles.boldBlue}>{ cl?.title}</Text></Text>    
+          400, textAlign:"center", fontSize:16}}>The temperature is currently <Text style={styles.boldBlue}>{ cl?.title}</Text></Text>    
         </View>
       </View>
       <Subtitle title="Hourly Forecast" isDay={id}/>

@@ -182,7 +182,7 @@ const Home = () => {
           <Text style={styles.bold}>{data.current.condition.text}</Text>
         </View>
         </View>
-        <View><Text style={{fontWeight:400, textAlign:"center", fontSize:16}}>The weather is currently <Text style={styles.boldBlue}>{ cl?.title}</Text></Text>    
+        <View><Text style={{fontWeight:400, textAlign:"center", fontSize:16}}>The temperature is currently <Text style={styles.boldBlue}>{ cl?.title}</Text></Text>    
         </View>
       </View>
       
