@@ -1,4 +1,4 @@
-import { TextInput, View, Text, TouchableHighlight, TouchableOpacity } from 'react-native'
+import { TextInput, View, Text, TouchableHighlight, TouchableOpacity, Pressable, TouchableNativeFeedback } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useState, useEffect } from 'react'
 import { styles } from '../styles/styles'
@@ -20,12 +20,13 @@ const Search = () => {
     }
     return(
         <View style={styles.searchWrapper}>    
-            <TextInput style={styles.searchInput} placeholder="Search for your city or country" onChangeText={text=>handleSearch(text)}/>
+            <TextInput style={styles.searchInput} placeholder="Search for a city or airport" onChangeText={text=>handleSearch(text)}/>
      
                 <View style={styles.searchResultsWrapper}>
                 {data && data.map((item:any,i:number)=>(
-                    <TouchableOpacity key={i} onPress={()=>router.navigate(`details/${item.name}`)}><View style={styles.searchResult}><Text>{item.name}, {item.region}</Text></View></TouchableOpacity>
+                    <TouchableOpacity key={i} onPress={()=>{router.navigate(`details/${item.name}`); setData(null)}}><View style={styles.searchResult}><Text>{item.name}, {item.region}</Text></View></TouchableOpacity>
                 ))}
+                {data && data.length > 0 && <TouchableHighlight onPress={()=>setData(null)}><View style={styles.clearButton}><Text>Clear results</Text></View></TouchableHighlight>}
                 </View>
         </View>
     )
