@@ -247,7 +247,7 @@ export const styles = StyleSheet.create({
     alignItems:"center"
   },
   boldBlue:{
-    fontWeight:600,
+    fontWeight:800,
     color:blue,
     fontSize:16
   },
