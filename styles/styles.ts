@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 export const blue = "#0023C4"
 export const pink = "#FF5CF3"
+export const lightblue = "#CEE1F2"
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -18,6 +19,9 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
+  },
+  paragraph:{
+
   },
   mainView: {
     display:"flex",
@@ -57,6 +61,11 @@ export const styles = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 5,
     textAlign: "center",
+    fontWeight:700
+  },
+  clearButton:{
+    padding:10,
+    fontWeight:600
   },
   center:{
     textAlign:"center"
@@ -75,14 +84,36 @@ export const styles = StyleSheet.create({
     minWidth:"48%",
     boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
   },
+  backDark: {
+    backgroundColor:blue
+  },
+  backBlue: {
+    
+  },
+  imgDark:{
+
+  },
+  textDark:{
+    color:"#fff"
+  },
+  marine:{
+    display:"flex",
+    flexDirection:"row",
+    gap:20
+  },
   cardBig:{
     boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
     backgroundColor:"#ffffff",
     borderRadius:10,
     padding:20,
     display:"flex",
+    gap:10
+  },
+  cardBigSection:{
+    display:"flex",
     flexDirection:"row",
     alignItems:"center",
+    justifyContent: 'center',
     gap:15
   },
   cardMedium:{
@@ -92,8 +123,7 @@ export const styles = StyleSheet.create({
     padding:20,
     display:"flex",
     flexDirection:"row",
-
-    gap:15
+    gap:20
   },
   cardSectionLeft:{
     
@@ -121,11 +151,12 @@ export const styles = StyleSheet.create({
     height:35,
   },
   bigIcon:{
-    width:50,
-    height:50,
+    width:60,
+    height:60,
   },
   subtitle:{
-    fontWeight:700
+    fontWeight:700,
+    fontSize:18
   },
   hourWrapper:{
     display:"flex",
@@ -198,9 +229,32 @@ export const styles = StyleSheet.create({
   bold:{
     fontWeight:600
   },
+  line:{
+    borderColor:"#eaeaea",
+    borderWidth:1,
+    marginBlock:10
+  },
+  clothrec:{
+    display:"flex",
+    flexDirection:"column",
+    flexWrap: "nowrap",
+    gap:5
+  },
+  clothsect:{
+    display:"flex",
+    flexDirection:"row",
+    gap:10,
+    alignItems:"center"
+  },
+  boldBlue:{
+    fontWeight:600,
+    color:blue,
+    fontSize:16
+  },
   cardSectionTitle:{
-    fontSize:60,
-    fontWeight:600
+    fontSize:70,
+    color:blue,
+    fontWeight:800
   },
   cardImage: {
     width: 15,
@@ -220,7 +274,7 @@ export const styles = StyleSheet.create({
   metric: {
     fontSize: 35,
     fontWeight: 800,
-    color: "#000",
+    color: blue,
   },
   defaultInput: {
     backgroundColor: "#fff",

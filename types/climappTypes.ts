@@ -31,6 +31,7 @@ export interface SavedLocation {
 export interface TemplateProps {
   children: React.ReactNode;
   title?: string;
+  isDay?: number;
   vCentered?: boolean;
   topGuard?: boolean;
 }

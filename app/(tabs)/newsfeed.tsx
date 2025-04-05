@@ -11,11 +11,11 @@ import {
 } from "react-native";
 import Template from "../../components/Template";
 import Spacer from "../../components/Spacer";
-import { styles } from "../../styles/styles"
+import { styles, blue } from "../../styles/styles"
 
 const API_KEY = "4Vq7ZdRNJ5XJQnSrOTZoHP58tG48XJmrkwV1H9N0";
 const COUNTRY = "ca";
-const MAX_PAGES = 3;
+const MAX_PAGES = 10;
 const ARTICLES_PER_PAGE = 12;
 
 const NewsFeed = () => {
@@ -56,7 +56,7 @@ const NewsFeed = () => {
     <View style={styles.mainView}>
     <View style={[styles.titleWrapper]}><Text style={styles.title}>News</Text></View>
         {loading && page === 1 ? (
-          <ActivityIndicator size="large" color="blue" />
+          <ActivityIndicator size="large" color={blue} />
         ) : articles.length > 0 ? (
           <>
             {articles.map((article, index) => (
@@ -125,7 +125,7 @@ const NewsFeed = () => {
             )}
 
             {loading && page > 1 && (
-              <ActivityIndicator size="small" color="blue" style={{ marginTop: 10 }} />
+              <ActivityIndicator color={blue} style={{ marginTop: 10 }} />
             )}
           </>
         ) : (

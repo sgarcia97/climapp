@@ -4,6 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import MapScreen from "../../components/MapScreen";
 import { useLocation } from "../../utils/Location";
 import { Coordinates } from "../../types/climappTypes";
+import { blue } from "../../styles/styles"
 
 const LocationScreen = () => {
   const { session } = useAuth();
@@ -23,7 +24,7 @@ const LocationScreen = () => {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator color={blue} />
       </View>
     );
   }

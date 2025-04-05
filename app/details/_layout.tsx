@@ -1,13 +1,16 @@
 import { Stack } from "expo-router";
-
+import { lightblue } from "../../styles/styles";
 const Layout = () => {
     return(
-        <Stack screenOptions={{
+        <Stack> 
+        <Stack.Screen name="[location]" options={{
+            presentation:"modal",
             headerTitle:"Location",
             headerStyle:{
-                backgroundColor:"0023C4"
+                backgroundColor:lightblue
             }
-        }}/> 
+        }}/>
+        </Stack>
     )
 }
 
