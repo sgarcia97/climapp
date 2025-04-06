@@ -45,16 +45,6 @@ export interface PinListProps {
   pins: Coordinates[];
   goToPin: (pin: Coordinates) => void;
   handleRemovePin: (index: number) => void;
+  handleShowWeather: (index: number) => void;
   pinTitles: string[];
 }
-/*
-export {
-  GeocodeResult,
-  Coordinates,
-  LocationResult,
-  TemplateProps,
-  SavedLocation,
-  MapScreenProps,
-  PinListProps,
-};
-*/

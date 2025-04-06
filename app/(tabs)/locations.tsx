@@ -4,7 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import MapScreen from "../../components/MapScreen";
 import { useLocation } from "../../utils/Location";
 import { Coordinates } from "../../types/climappTypes";
-import { blue } from "../../styles/styles"
+import { blue } from "../../styles/styles";
 
 const LocationScreen = () => {
   const { session } = useAuth();
@@ -39,19 +39,6 @@ const LocationScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* <Text>Welcome, {session.user.user_metadata.display_name}!</Text>
-      <Text>Your current location:</Text>
-      {locationErrorMsg ? (
-        <Text style={{ color: "red" }}>{locationErrorMsg}</Text>
-      ) : (
-        <>
-          <Text>City: {cityInfo?.city || "N/A"}</Text>
-          <Text>Country: {cityInfo?.country || "N/A"}</Text>
-          <Text>
-            Coordinates: {coordinates?.latitude}, {coordinates?.longitude}
-          </Text>
-        </>
-      )} */}
       <MapScreen
         coords={coordinates}
         onLocationChange={(newCoords: Coordinates) => {
