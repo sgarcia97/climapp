@@ -57,11 +57,11 @@ const Location = () => {
            { Platform.OS === 'ios' && <TouchableOpacity onPress={()=>router.back()} ><View style={styles.backWrapperr}><Image style={{width:25, height:25}} source={require('../../assets/arrow-white.png')}/><Text style={{fontWeight:700, fontSize:18, color:"#fff"}}>Back</Text></View></TouchableOpacity> 
 } 
             <View style={styles.mainView}>
-      <Title title={`${decodeURIComponent(location)}, ${data.location.country}`} isDay={id}/>
+      <Title title={`${data.location.name}, ${data.location.country}`} isDay={id}/>
         
         <View><Text style={{color:"#999999"}}>Last updated {moment(data.current.last_updated).format('ddd MMM M [at] h:mma')}</Text></View>
   
-        <Subtitle title={`Today's weather in ${location}`} isDay={id}/>
+        <Subtitle title={`Today's weather in ${data.location.name}`} isDay={id}/>
       <View style={styles.cardBig}>
         <View style={styles.cardBigSection}>
       <Image style={styles.bigIcon} source={{ uri:data.current.is_day == 1 ? ico?.icon : ico?.iconn}}/>
