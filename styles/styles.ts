@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-export const blue = "#0023C4"
-export const pink = "#FF5CF3"
-export const lightblue = "#CEE1F2"
+export const blue = "#0023C4";
+export const pink = "#FF5CF3";
+export const lightblue = "#CEE1F2";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -20,26 +20,21 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
-  paragraph:{
-
-  },
+  paragraph: {},
   mainView: {
-    display:"flex",
-    paddingInline:15,
-    paddingTop:10,
-    gap:15
+    display: "flex",
+    paddingInline: 15,
+    paddingTop: 10,
+    gap: 15,
   },
-  scrView:{
-    
-  },
-  staticView:{
-    display:"flex",
-    flexDirection:"column",
-    gap:10,
-    paddingInline:15,
-    justifyContent:"center",
-    paddingTop:60
-    
+  scrView: {},
+  staticView: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 10,
+    paddingInline: 15,
+    justifyContent: "center",
+    paddingTop: 60,
   },
   mainViewVCentered: {
     flex: 1,
@@ -61,200 +56,192 @@ export const styles = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 5,
     textAlign: "center",
-    fontWeight:700
+    fontWeight: 700,
   },
-  clearButton:{
-    padding:10,
-    fontWeight:600
+  clearButton: {
+    padding: 10,
+    fontWeight: 600,
   },
-  center:{
-    textAlign:"center"
+  center: {
+    textAlign: "center",
   },
   cardWrapper: {
-    display:"flex",
-    flexDirection:"row",
-    justifyContent:"center",
-    flexWrap:"wrap",
-    gap:10,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: 10,
     paddingBlock: 10,
   },
   card: {
     backgroundColor: "#fff",
     borderRadius: 10,
-    minWidth:"48%",
+    minWidth: "48%",
     boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
   },
   backDark: {
-    backgroundColor:blue
+    backgroundColor: blue,
   },
-  backBlue: {
-    
+  backBlue: {},
+  imgDark: {},
+  textDark: {
+    color: "#fff",
   },
-  imgDark:{
-
+  marine: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 20,
   },
-  textDark:{
-    color:"#fff"
-  },
-  marine:{
-    display:"flex",
-    flexDirection:"row",
-    gap:20
-  },
-  cardBig:{
+  cardBig: {
     boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
-    backgroundColor:"#ffffff",
-    borderRadius:10,
-    padding:20,
-    display:"flex",
-    gap:10
+    backgroundColor: "#ffffff",
+    borderRadius: 10,
+    padding: 20,
+    display: "flex",
+    gap: 10,
   },
-  cardBigSection:{
-    display:"flex",
-    flexDirection:"row",
-    alignItems:"center",
-    justifyContent: 'center',
-    gap:15
+  cardBigSection: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 15,
   },
-  cardMedium:{
+  cardMedium: {
     boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
-    backgroundColor:"#ffffff",
-    borderRadius:10,
-    padding:20,
-    display:"flex",
-    flexDirection:"row",
-    gap:20
+    backgroundColor: "#ffffff",
+    borderRadius: 10,
+    padding: 20,
+    display: "flex",
+    flexDirection: "row",
+    gap: 20,
   },
-  cardSectionLeft:{
-    
+  cardSectionLeft: {},
+  cardSectionRight: {},
+  cardMediumSectionWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 10,
   },
-  cardSectionRight:{
-    
+  cardMediumSection: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 15,
   },
-  cardMediumSectionWrapper:{
-    display:"flex",
-    flexDirection:"column",
-    gap:10
+  smallIcon: {
+    width: 20,
+    height: 20,
   },
-  cardMediumSection:{
-    display:"flex",
-    flexDirection:"row",
-    alignItems:"center",
-    gap:15
+  mediumIcon: {
+    width: 35,
+    height: 35,
   },
-  smallIcon:{
-    width:20,
-    height:20
+  bigIcon: {
+    width: 60,
+    height: 60,
   },
-  mediumIcon:{
-    width:35,
-    height:35,
+  subtitle: {
+    fontWeight: 700,
+    fontSize: 18,
   },
-  bigIcon:{
-    width:60,
-    height:60,
+  hourWrapper: {
+    display: "flex",
+    marginBlock: 15,
+    flexDirection: "row",
+    gap: 10,
+    paddingLeft: 15,
   },
-  subtitle:{
-    fontWeight:700,
-    fontSize:18
-  },
-  hourWrapper:{
-    display:"flex",
-    marginBlock:15,
-    flexDirection:"row",
-    gap:10,
-    paddingLeft:15
-  },
-  hour:{
+  hour: {
     boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
-    padding:10,
-    display:"flex",
-    flexDirection:"column",
-    gap:15,
-    alignItems:"center",
-    backgroundColor:"#fff",
-    borderRadius:5,
-    width:80
+    padding: 10,
+    display: "flex",
+    flexDirection: "column",
+    gap: 15,
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    width: 80,
   },
-  hourTemp:{
-    display:"flex",
-    justifyContent:"center",
-    alignItems:"center",
-    flexDirection:"row",
-    flexWrap:"nowrap",
-    width:"100%",
-    textAlign:"center",
-    color:"#dddddd"
-  },
-  dayWrapper:{
-    flex:1,
-    gap:5
-  },
-  day:{
-    boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
-    padding:10,
-    borderRadius:5,
-    backgroundColor:"#fff",
-    display:"flex",
-    flexDirection:"row",
-    alignItems:"center",
-    justifyContent:"space-between",
-    gap:10
-  },
-  dayTitleWrapper:{
-    display:"flex",
-    flexDirection:"row",
-    gap:5
-  },
-  dayTitle:{
-    fontWeight:600,
-    fontSize:16,
-    width:45
-  },
-  searchWrapper:{
-    position:"relative"
-  },
-  searchResultsWrapper:{
-    position:"absolute",
-    width:"100%",
-    top:"105%",
-    backgroundColor:"#fff",
-    zIndex:2,
-    borderRadius:5,
-    boxShadow:"0 1 10 0 rgba(50,50,50,0.1)"
-  },
-  searchResult:{
-    padding:15
-  },
-  bold:{
-    fontWeight:600
-  },
-  line:{
-    borderColor:"#eaeaea",
-    borderWidth:1,
-    marginBlock:10
-  },
-  clothrec:{
-    display:"flex",
-    flexDirection:"column",
+  hourTemp: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
     flexWrap: "nowrap",
-    gap:5
+    width: "100%",
+    textAlign: "center",
+    color: "#dddddd",
   },
-  clothsect:{
-    display:"flex",
-    flexDirection:"row",
-    gap:10,
-    alignItems:"center"
+  dayWrapper: {
+    flex: 1,
+    gap: 5,
   },
-  boldBlue:{
-    fontWeight:800,
-    color:blue,
-    fontSize:16
+  day: {
+    boxShadow: "0 2 15 0 rgba(50,50,50,0.1)",
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: "#fff",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 10,
   },
-  cardSectionTitle:{
-    fontSize:70,
-    color:blue,
-    fontWeight:800
+  dayTitleWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 5,
+  },
+  dayTitle: {
+    fontWeight: 600,
+    fontSize: 16,
+    width: 45,
+  },
+  searchWrapper: {
+    position: "relative",
+  },
+  searchResultsWrapper: {
+    position: "absolute",
+    width: "100%",
+    top: "105%",
+    backgroundColor: "#fff",
+    zIndex: 2,
+    borderRadius: 5,
+    boxShadow: "0 1 10 0 rgba(50,50,50,0.1)",
+  },
+  searchResult: {
+    padding: 15,
+  },
+  bold: {
+    fontWeight: 600,
+  },
+  line: {
+    borderColor: "#eaeaea",
+    borderWidth: 1,
+    marginBlock: 10,
+  },
+  clothrec: {
+    display: "flex",
+    flexDirection: "column",
+    flexWrap: "nowrap",
+    gap: 5,
+  },
+  clothsect: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+  },
+  boldBlue: {
+    fontWeight: 800,
+    color: blue,
+    fontSize: 16,
+  },
+  cardSectionTitle: {
+    fontSize: 70,
+    color: blue,
+    fontWeight: 800,
   },
   cardImage: {
     width: 15,
@@ -322,7 +309,7 @@ export const styles = StyleSheet.create({
     position: "absolute",
     bottom: 50,
     alignSelf: "center",
-    backgroundColor: "#6200ee",
+    backgroundColor: blue,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 30,
@@ -366,15 +353,19 @@ export const styles = StyleSheet.create({
     minWidth: 180,
     maxWidth: "100%",
   },
+  // mapButtonGreen: {
+  //   backgroundColor: "#4CAF50",
+  // },
+  // mapButtonRed: {
+  //   backgroundColor: "#2196F3",
+  // },
   mapButtonGreen: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: pink,
   },
   mapButtonRed: {
-    backgroundColor: "#2196F3",
+    backgroundColor: blue,
   },
   mapButtonMR: {
     marginRight: 10,
   },
 });
-
-
