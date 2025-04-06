@@ -1,4 +1,4 @@
-import { Text, View, ActivityIndicator, Image, ScrollView, RefreshControl, TouchableOpacity} from "react-native";
+import { Text, View, ActivityIndicator, Image, Platform, ScrollView, RefreshControl, TouchableOpacity} from "react-native";
 import Template from "../../components/Template"
 import Hour from "../../components/Hour"
 import Day from "../../components/Day"
@@ -42,6 +42,7 @@ const Location = () => {
 
   // Weather data
   if(!data){ return <View style={{flex:1,padding:30}}><ActivityIndicator color={blue}/></View>}
+  console.log('Marine',mdata)
   const id = data.current.is_day
   const ico = weatherIcons.find((i)=>{
     return i.code === data.current.condition.code
@@ -51,12 +52,13 @@ const Location = () => {
   })
   return (
     <Template isDay={id}>  
-      <ScrollView stickyHeaderIndices={[0]} style={styles.scrView} refreshControl={
+      <ScrollView stickyHeaderIndices={Platform.OS === 'ios' ? [0] : []} style={styles.scrView} refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
-            <TouchableOpacity onPress={()=>router.back()} ><View style={styles.backWrapperr}><Image style={{width:25, height:25}} source={require('../../assets/arrow-white.png')}/><Text style={{fontWeight:700, fontSize:18, color:"#fff"}}>Back</Text></View></TouchableOpacity>
+           { Platform.OS === 'ios' && <TouchableOpacity onPress={()=>router.back()} ><View style={styles.backWrapperr}><Image style={{width:25, height:25}} source={require('../../assets/arrow-white.png')}/><Text style={{fontWeight:700, fontSize:18, color:"#fff"}}>Back</Text></View></TouchableOpacity> 
+} 
             <View style={styles.mainView}>
-      <Title title={decodeURIComponent(location)} isDay={id}/>
+      <Title title={`${decodeURIComponent(location)}, ${data.location.country}`} isDay={id}/>
         
         <View><Text style={{color:"#999999"}}>Last updated {moment(data.current.last_updated).format('ddd MMM M [at] h:mma')}</Text></View>
   
@@ -119,7 +121,7 @@ const Location = () => {
       <Subtitle title="What's the next week looking like" isDay={id}/>
       <View style={styles.dayWrapper}>
         {
-         
+        
           data.forecast.forecastday.map((item:any,i:number)=>{
             const icon = weatherIcons.find((i)=>{
               return i.code === item.day.condition.code
@@ -206,7 +208,7 @@ const Location = () => {
         }
         <Subtitle title="Sail the Seas" isDay={id}/>
         <View style={styles.cardBig}>
-        { mdata && 
+        { mdata && mdata.error ? <Text>No data found for this location</Text> :
 
         mdata.forecast.forecastday[0].day.tides[0].tide.map((t:any,i:number)=>(
        <View key={i} style={styles.marine}><Image style={styles.mediumIcon} source={ t.tide_type == "HIGH" ? require('../../assets/weather/high-tide.png') : require('../../assets/weather/low-tide.png') }/>

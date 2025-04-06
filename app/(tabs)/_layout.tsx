@@ -14,9 +14,8 @@ const TabLayout = () => {
       },
       headerStyle:{
         backgroundColor: blue,
-        boxShadow: Platform.OS === 'android' ? "0 0 0 0": ''
-      
       },
+      headerShadowVisible:false,
       headerTitleStyle:{
         color:"#fff"
       },

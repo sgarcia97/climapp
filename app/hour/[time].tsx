@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
-import {View, Text, ScrollView, TouchableOpacity} from "react-native"
+import {View, Text, ScrollView, Platform, TouchableOpacity} from "react-native"
 import Subtitle from "../../components/Subtitle";
 import { Image } from "react-native";
 import { styles, blue } from "../../styles/styles";
@@ -16,8 +16,8 @@ const Info = () => {
     })
 
     return(
-        <ScrollView>
-            <TouchableOpacity onPress={()=>router.back()} ><View style={styles.backWrapper}><Image style={{width:25, height:25}} source={require('../../assets/arrow.png')}/><Text style={{fontWeight:700, fontSize:18}}>Back</Text></View></TouchableOpacity>
+        <ScrollView stickyHeaderIndices={Platform.OS === 'ios' ? [0] : []}>
+            {Platform.OS === 'ios' && <TouchableOpacity onPress={()=>router.back()} ><View style={styles.backWrapper}><Image style={{width:25, height:25}} source={require('../../assets/arrow.png')}/><Text style={{fontWeight:700, fontSize:18}}>Back</Text></View></TouchableOpacity>}
         <View style={styles.mainView}>
         <View style={styles.cardBig}>
             <Text style={{color:blue, fontSize:40, fontWeight:800}}>{moment(params.time).format('h:mm A')}</Text>

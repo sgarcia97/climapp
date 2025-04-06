@@ -1,5 +1,6 @@
 import { Stack } from "expo-router";
 import { lightblue, blue } from "../../styles/styles";
+import { Image } from "react-native";
 const Layout = () => {
     return(
         <Stack> 
@@ -9,9 +10,8 @@ const Layout = () => {
             headerStyle:{
                 backgroundColor:blue
             },
-            headerTitleStyle:{
-                color:"#fff"
-            }
+            headerBackVisible:true,
+            headerTintColor:"#fff"
         }}/>
         </Stack>
     )
