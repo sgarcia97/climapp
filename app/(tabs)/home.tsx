@@ -323,7 +323,7 @@ const Home = () => {
         }
         <Subtitle title="Sail the Seas" isDay={id}/>
         <View style={styles.cardBig}>
-        { mdata && 
+        { mdata && mdata.error ? <Text>No data found for this location</Text> :
 
         mdata.forecast.forecastday[0].day.tides[0].tide.map((t:any,i:number)=>(
        <View key={i} style={styles.marine}><Image style={styles.mediumIcon} source={ t.tide_type == "HIGH" ? require('../../assets/weather/high-tide.png') : require('../../assets/weather/low-tide.png') }/>

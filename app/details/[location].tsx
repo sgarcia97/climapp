@@ -42,7 +42,6 @@ const Location = () => {
 
   // Weather data
   if(!data){ return <View style={{flex:1,padding:30}}><ActivityIndicator color={blue}/></View>}
-  console.log('Marine',mdata)
   const id = data.current.is_day
   const ico = weatherIcons.find((i)=>{
     return i.code === data.current.condition.code
