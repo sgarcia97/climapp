@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity, Alert } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { PinListProps } from "../types/climappTypes";
-import { styles } from "../styles/styles";
+import { styles, blue, pink } from "../styles/styles";
 
 const PinList = ({
   pins,

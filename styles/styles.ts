@@ -271,13 +271,36 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ddd",
   },
+  searchHomeWrapper:{
+    backgroundColor:blue, 
+    paddingInline:20, 
+    paddingBlock:20,
+    borderRadius:'0 0 15 15',
+    marginBottom:10
+  },
   searchInput: {
     backgroundColor: "#fff",
-    paddingHorizontal: 10,
+    paddingLeft:10,
+    paddingRight:10,
     paddingVertical: 15,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#ddd",
+    boxShadow:"0 1 10 0 rgba(0,0,0,0.1)"
+  },
+  backWrapper:{
+    padding:15,
+    backgroundColor:"#f1f1f1",
+    display:"flex",
+    flexDirection:"row",
+    alignItems:"center",
+    gap:10
+  },
+  backWrapperr:{
+    padding:15,
+    backgroundColor:blue,
+    display:"flex",
+    flexDirection:"row",
+    alignItems:"center",
+    gap:10
   },
   templateContainer: {
     flexGrow: 1,
@@ -340,7 +363,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#4CAF50",
   },
   pinRed: {
-    backgroundColor: "#2196F3",
+    backgroundColor: blue,
   },
   mapButtonDefault: {
     padding: 10,

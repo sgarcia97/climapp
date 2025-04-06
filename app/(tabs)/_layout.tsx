@@ -13,8 +13,9 @@ const TabLayout = () => {
         paddingTop:5
       },
       headerStyle:{
-        backgroundColor:blue
+        backgroundColor: blue,
       },
+      headerShadowVisible:false,
       headerTitleStyle:{
         color:"#fff"
       },

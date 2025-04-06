@@ -1,4 +1,4 @@
-import { Text, View, ActivityIndicator, Image, ScrollView, RefreshControl} from "react-native";
+import { Text, View, ActivityIndicator, Image, ScrollView, RefreshControl, Platform} from "react-native";
 import Search from "../../components/Search"
 import moment from "moment";
 import { supabase } from "../../api/UserApi";
@@ -152,12 +152,17 @@ const Home = () => {
 
   return (
     <Template isDay={id}>  
-      <ScrollView style={styles.scrView} refreshControl={
+    
+      <ScrollView stickyHeaderIndices={[0]} style={styles.scrView} refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
-            <View style={styles.mainView}>
-            <Title title={welcomeTitle} isDay={id}/>
-      <Search/>
+        <View style={styles.searchHomeWrapper}>
+    <View style={{paddingBottom:10}}><Text style={{color:"#fff", fontWeight:700}}>{welcomeTitle}</Text></View>
+    <Search/>
+      
+    </View>    
+      <View style={styles.mainView}>
+      
       {fetchError && <Text style={styles.errorText}>{fetchError}</Text>}
       {locationErrorMsg && (
         <Text style={styles.errorText}>{locationErrorMsg}</Text>
@@ -170,6 +175,8 @@ const Home = () => {
         <Text style={{color:"#999999"}}>Last updated {moment(data.current.last_updated).format('ddd MMM M [at] h:mma')}</Text></View>
    
       )}
+            
+     
       <Subtitle title="Today's Weather" isDay={id}/>
       <View style={styles.cardBig}>
         <View style={styles.cardBigSection}>

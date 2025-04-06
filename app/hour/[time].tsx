@@ -1,22 +1,26 @@
 import { useLocalSearchParams } from "expo-router";
-import {View, Text, ScrollView} from "react-native"
+import {View, Text, ScrollView, Platform, TouchableOpacity} from "react-native"
 import Subtitle from "../../components/Subtitle";
 import { Image } from "react-native";
 import { styles, blue } from "../../styles/styles";
 import clothing from "../../api/ClothingApi";
 import moment from "moment";
+import Spacer from "../../components/Spacer";
+import { useRouter } from "expo-router";
 
 const Info = () => {
+    const router = useRouter()
     const params = useLocalSearchParams<any>()
     const cl = clothing.find((item)=>{
         return params.feelslike_c <= item.temphigh && params.feelslike_c >= item.templow
     })
 
     return(
-        <ScrollView>
+        <ScrollView stickyHeaderIndices={Platform.OS === 'ios' ? [0] : []}>
+            {Platform.OS === 'ios' && <TouchableOpacity onPress={()=>router.back()} ><View style={styles.backWrapper}><Image style={{width:25, height:25}} source={require('../../assets/arrow.png')}/><Text style={{fontWeight:700, fontSize:18}}>Back</Text></View></TouchableOpacity>}
         <View style={styles.mainView}>
         <View style={styles.cardBig}>
-            <Text style={{color:blue, fontSize:20, fontWeight:800}}>{moment(params.time).format('h:mm A')}</Text>
+            <Text style={{color:blue, fontSize:40, fontWeight:800}}>{moment(params.time).format('h:mm A')}</Text>
             <Text style={{fontSize:16, fontWeight:800}}>Temperature: 
                 <Text style={styles.boldBlue}> {params.temp_c+'\u00B0'}C</Text>
             </Text>
@@ -50,6 +54,7 @@ const Info = () => {
           <Text>{params.will_it_rain > 10 ? 'You will need an umbrella' : params.will_it_rain < 10 && params.will_it_rain > 2 ? 'You may not need an umbrella' : 'You do not need an umbrella'}</Text></View>
         </View>
         </View>
+        <Spacer/>
         </ScrollView>
     )
 }

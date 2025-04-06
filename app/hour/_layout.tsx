@@ -1,14 +1,16 @@
 import { Stack } from "expo-router";
-import { lightblue } from "../../styles/styles";
+import { blue } from "../../styles/styles";
 const Layout = () => {
     return(
         <Stack> 
         <Stack.Screen name="[time]" options={{
             presentation:"transparentModal",
-            headerTitle:"Time Information",
-            headerStyle:{
-                backgroundColor:lightblue
-            }
+                       headerTitle:"Time Information",
+                       headerStyle:{
+                           backgroundColor:blue
+                       },
+                       headerBackVisible:true,
+                       headerTintColor:"#fff"
         }}/>
         </Stack>
     )
