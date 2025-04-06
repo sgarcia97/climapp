@@ -159,7 +159,7 @@ const Location = () => {
 })
 
         }
-      >
+      </View>
         {Platform.OS === "ios" && (
           <TouchableOpacity onPress={() => router.back()}>
             <View style={styles.backWrapperr}>
@@ -224,7 +224,7 @@ const Location = () => {
           </View>
           <Subtitle title="Hourly Forecast" isDay={id} />
         </View>
-
+</View>
         <ScrollView horizontal>
           <View style={styles.hourWrapper}>
             <Hour
