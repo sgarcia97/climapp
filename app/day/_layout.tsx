@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { lightblue } from "../../styles/styles";
+import { lightblue, blue } from "../../styles/styles";
 const Layout = () => {
     return(
         <Stack> 
@@ -7,7 +7,10 @@ const Layout = () => {
             presentation:"transparentModal",
             headerTitle:"Day Information",
             headerStyle:{
-                backgroundColor:lightblue
+                backgroundColor:blue
+            },
+            headerTitleStyle:{
+                color:"#fff"
             }
         }}/>
         </Stack>

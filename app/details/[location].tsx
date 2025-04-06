@@ -1,4 +1,4 @@
-import { Text, View, ActivityIndicator, Image, ScrollView, RefreshControl} from "react-native";
+import { Text, View, ActivityIndicator, Image, ScrollView, RefreshControl, TouchableOpacity} from "react-native";
 import Template from "../../components/Template"
 import Hour from "../../components/Hour"
 import Day from "../../components/Day"
@@ -7,7 +7,7 @@ import CardMedium from "../../components/CardMedium"
 import Spacer from "../../components/Spacer"
 import Subtitle from "../../components/Subtitle"
 import moment from "moment";
-import { styles, pink, blue } from "../../styles/styles";
+import { styles, pink, blue, lightblue } from "../../styles/styles";
 import { useLocalSearchParams } from "expo-router"
 import { useEffect, useState, useCallback } from "react"
 import { astronomyApi, weatherApi, marineApi } from "../../api/WeatherApi";
@@ -51,9 +51,10 @@ const Location = () => {
   })
   return (
     <Template isDay={id}>  
-      <ScrollView style={styles.scrView} refreshControl={
+      <ScrollView stickyHeaderIndices={[0]} style={styles.scrView} refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
+            <TouchableOpacity onPress={()=>router.back()} ><View style={styles.backWrapperr}><Image style={{width:25, height:25}} source={require('../../assets/arrow-white.png')}/><Text style={{fontWeight:700, fontSize:18, color:"#fff"}}>Back</Text></View></TouchableOpacity>
             <View style={styles.mainView}>
       <Title title={decodeURIComponent(location)} isDay={id}/>
         
