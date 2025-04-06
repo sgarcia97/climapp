@@ -4,9 +4,8 @@ import {
   SavedLocation,
   MapScreenProps,
 } from "../types/climappTypes";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useState, useEffect, useRef } from "react";
-import { View, Text, TouchableOpacity, Alert } from "react-native";
+import { View, Text, TouchableOpacity, Platform } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useLocation } from "../utils/Location";
 import * as Location from "expo-location";
@@ -173,7 +172,7 @@ const MapScreen = ({ coords, onLocationChange }: MapScreenProps) => {
     <View style={styles.mapContainer}>
       <MapView
         ref={mapRef}
-        provider={PROVIDER_GOOGLE}
+        provider={Platform.OS === "android" ? PROVIDER_GOOGLE : undefined}
         style={styles.map}
         initialRegion={{
           latitude: selectedCoordinates?.latitude || 37.78825,
