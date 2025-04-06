@@ -12,23 +12,35 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "test": "jest"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^2.1.2",
+    "@react-native-async-storage/async-storage": "1.23.1",
     "@supabase/supabase-js": "^2.49.1",
-    "expo": "~52.0.37",
-    "expo-location": "^18.0.8",
-    "expo-router": "^4.0.19",
+    "expo": "~52.0.42",
+    "expo-location": "~18.0.10",
+    "expo-router": "~4.0.20",
     "expo-status-bar": "~2.0.1",
+    "fast-xml-parser": "^5.2.0",
+    "moment": "^2.30.1",
     "react": "18.3.1",
-    "react-native": "0.76.7",
-    "react-native-url-polyfill": "^2.0.0"
+    "react-native": "0.76.9",
+    "react-native-maps": "1.18.0",
+    "react-native-url-polyfill": "^2.0.0",
+    "react-native-uuid": "^2.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@types/react": "~18.3.12",
+    "expo-module-scripts": "^4.0.4",
+    "jest-expo": "~52.0.6",
+    "react-test-renderer": "18.3.1",
     "typescript": "^5.3.3"
+  },
+  "resolutions": {
+    "react": "18.3.1",
+    "react-test-renderer": "18.3.1"
   },
   "private": true
 }
