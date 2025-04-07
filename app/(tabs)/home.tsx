@@ -269,7 +269,7 @@ const Home = () => {
               condition={data.current.condition.text}
               feel={data.current.feelslike_c}
             />
-            {data.forecast.forecastday.map((item: any, i: number) =>
+            {data.forecast && data.forecast.forecastday.map((item: any, i: number) =>
               item.hour.map((h: any, i: number) => {
                 const icon = weatherIcons.find((i) => {
                   return i.code === h.condition.code;
@@ -374,7 +374,7 @@ const Home = () => {
           </View>
           <Subtitle title="What's the next week looking like" isDay={id} />
           <View style={styles.dayWrapper}>
-            {data.forecast.forecastday.map((item: any, i: number) => {
+            {data.forecast && data.forecast.forecastday.map((item: any, i: number) => {
               const icon = weatherIcons.find((i) => {
                 return i.code === item.day.condition.code;
               });
@@ -500,7 +500,7 @@ const Home = () => {
             {mdata && mdata.error ? (
               <Text>No data found for this location</Text>
             ) : (
-              mdata.forecast.forecastday[0].day.tides[0].tide.map(
+              mdata.forecast && mdata.forecast.forecastday[0].day.tides[0].tide.map(
                 (t: any, i: number) => (
                   <View key={i} style={styles.marine}>
                     <Image
