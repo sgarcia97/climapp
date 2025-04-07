@@ -104,7 +104,7 @@ const Location = () => {
         <View style={styles.hourWrapper}>
         <Hour date="Now" onClick={()=>router.navigate({pathname:`hour/${data.current.last_updated}`,params:data.current})} img={data.current.is_day == 1 ? ico?.icon : ico?.iconn} temp={data.current.temp_c} condition={data.current.condition.text} feel={data.current.feelslike_c} />
       {
-        data.forecast.forecastday.map((item:any,i:number)=>(
+        data.forecast && data.forecast.forecastday.map((item:any,i:number)=>(
           
           item.hour.map((h:any,i:number)=>{
             const icon = weatherIcons.find((i)=>{
@@ -141,7 +141,7 @@ const Location = () => {
       <View style={styles.dayWrapper}>
         {
         
-          data.forecast.forecastday.map((item:any,i:number)=>{
+          data.forecast && data.forecast.forecastday.map((item:any,i:number)=>{
             const icon = weatherIcons.find((i)=>{
               return i.code === item.day.condition.code
             })
@@ -160,215 +160,14 @@ const Location = () => {
 
         }
       </View>
-        {Platform.OS === "ios" && (
-          <TouchableOpacity onPress={() => router.back()}>
-            <View style={styles.backWrapperr}>
-              <Image
-                style={{ width: 25, height: 25 }}
-                source={require("../../assets/arrow-white.png")}
-              />
-              <Text style={{ fontWeight: 700, fontSize: 18, color: "#fff" }}>
-                Back
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
-        <View style={styles.mainView}>
-          <Title title={locStr} isDay={id} />
-
-          <View>
-            <Text style={{ color: "#999999" }}>
-              Last updated{" "}
-              {moment(data.current.last_updated).format("ddd MMM M [at] h:mma")}
-            </Text>
-          </View>
-
-          <Subtitle title={`Today's weather in ${locStr}`} isDay={id} />
-          <View style={styles.cardBig}>
-            <View style={styles.cardBigSection}>
-              <Image
-                style={styles.bigIcon}
-                source={{
-                  uri: data.current.is_day == 1 ? ico?.icon : ico?.iconn,
-                }}
-              />
-              <View style={styles.cardSectionLeft}>
-                <Text style={styles.cardSectionTitle}>
-                  {Math.round(data.current.temp_c) + "\u00B0"}
-                </Text>
-              </View>
-              <View style={styles.cardSectionRight}>
-                <Text>
-                  Real feel{" "}
-                  <Text style={styles.bold}>
-                    {Math.round(data.current.feelslike_c) + "\u00B0"}
-                  </Text>
-                </Text>
-                <Text>
-                  Wind Chill{" "}
-                  <Text style={styles.bold}>
-                    {Math.round(data.current.windchill_c) + "\u00B0"}
-                  </Text>
-                </Text>
-                <Text style={styles.bold}>{data.current.condition.text}</Text>
-              </View>
-            </View>
-            <View>
-              <Text
-                style={{ fontWeight: 400, textAlign: "center", fontSize: 16 }}
-              >
-                The temperature is currently{" "}
-                <Text style={styles.boldBlue}>{cl?.title}</Text>
-              </Text>
-            </View>
-          </View>
-          <Subtitle title="Hourly Forecast" isDay={id} />
-        </View>
+      
+     
 </View>
-        <ScrollView horizontal>
-          <View style={styles.hourWrapper}>
-            <Hour
-              date="Now"
-              onClick={() =>
-                router.navigate({
-                  pathname: `hour/${data.current.last_updated}`,
-                  params: data.current,
-                })
-              }
-              img={data.current.is_day == 1 ? ico?.icon : ico?.iconn}
-              temp={data.current.temp_c}
-              condition={data.current.condition.text}
-              feel={data.current.feelslike_c}
-            />
-            {data.forecast.forecastday.map((item: any, i: number) =>
-              item.hour.map((h: any, i: number) => {
-                const icon = weatherIcons.find((i) => {
-                  return i.code === h.condition.code;
-                });
-                const cd = moment(data.current.last_updated).format(
-                  "YYYY-MM-DD HH:mm"
-                );
-                const wd = moment(h.time).format("YYYY-MM-DD HH:mm");
-
-                if (wd > cd) {
-                  return (
-                    <Hour
-                      key={i}
-                      onClick={() =>
-                        router.navigate({
-                          pathname: `hour/${h.time}`,
-                          params: h,
-                        })
-                      }
-                      img={h.is_day == 1 ? icon?.icon : icon?.iconn}
-                      date={moment(h.time).format("h A")}
-                      temp={h.temp_c}
-                      feel={h.feelslike_c}
-                      condition={h.condition.text}
-                    />
-                  );
-                }
-              })
-            )}
-          </View>
-        </ScrollView>
+  
         <View style={styles.mainView}>
-          <Subtitle title="Recommended Clothing for Now" isDay={id} />
-          <View style={styles.cardBig}>
-            <View style={styles.clothrec}>
-              <View style={styles.clothsect}>
-                <Image
-                  style={styles.mediumIcon}
-                  source={require("../../assets/tshirt.png")}
-                />
-                <Text style={styles.boldBlue}>Shirt</Text>
-              </View>
-              <Text>{cl?.shirt}</Text>
-            </View>
-            <View style={styles.clothrec}>
-              <View style={styles.clothsect}>
-                <Image
-                  style={styles.mediumIcon}
-                  source={require("../../assets/jeans.png")}
-                />
-                <Text style={styles.boldBlue}>Pants</Text>
-              </View>
-              <Text>{cl?.pants}</Text>
-            </View>
-            <View style={styles.clothrec}>
-              <View style={styles.clothsect}>
-                <Image
-                  style={styles.mediumIcon}
-                  source={require("../../assets/sneaker.png")}
-                />
-                <Text style={styles.boldBlue}>Shoes</Text>
-              </View>
-              <Text>{cl?.shoes}</Text>
-            </View>
-            <View style={styles.clothrec}>
-              <View style={styles.clothsect}>
-                <Image
-                  style={styles.mediumIcon}
-                  source={require("../../assets/varsity-jacket.png")}
-                />
-                <Text style={styles.boldBlue}>Overalls</Text>
-              </View>
-              <Text>{cl?.top}</Text>
-            </View>
-            <View style={styles.clothrec}>
-              <View style={styles.clothsect}>
-                <Image
-                  style={styles.mediumIcon}
-                  source={require("../../assets/winter-gloves.png")}
-                />
-                <Text style={styles.boldBlue}>Accesories</Text>
-              </View>
-              <Text>{cl?.acc}</Text>
-            </View>
-            <View style={styles.clothrec}>
-              <View style={styles.clothsect}>
-                <Image
-                  style={styles.mediumIcon}
-                  source={require("../../assets/weather/umbrella.png")}
-                />
-                <Text style={styles.boldBlue}>Umbrella</Text>
-              </View>
-              <Text>
-                {data.current.daily_will_it_rain > 10
-                  ? "You will need an umbrella"
-                  : data.current.daily_will_it_rain < 10 &&
-                      data.current.daily_will_it_rain > 2
-                    ? "You may not need an umbrella"
-                    : "You do not need an umbrella"}
-              </Text>
-            </View>
-          </View>
-          <Subtitle title="What's the next week looking like" isDay={id} />
-          <View style={styles.dayWrapper}>
-            {data.forecast.forecastday.map((item: any, i: number) => {
-              const icon = weatherIcons.find((i) => {
-                return i.code === item.day.condition.code;
-              });
-
-              return (
-                <Day
-                  key={i}
-                  onClick={() =>
-                    router.navigate({
-                      pathname: `day/${item.date}`,
-                      params: item.day,
-                    })
-                  }
-                  img={icon?.icon}
-                  min={item.day.mintemp_c}
-                  max={item.day.maxtemp_c}
-                  date={item.date}
-                  isDay={id}
-                  condition={item.day.condition.text}
-                />
-              );
-            })}
-          </View>
+       
+     
+      
           <View style={styles.cardWrapper}>
             <Card
               title="Precipitation"
@@ -468,10 +267,10 @@ const Location = () => {
           )}
           <Subtitle title="Sail the Seas" isDay={id} />
           <View style={styles.cardBig}>
-            {mdata && mdata.error ? (
+            {mdata.forecast && mdata.error ? (
               <Text>No data found for this location</Text>
             ) : (
-              mdata.forecast.forecastday[0].day.tides[0].tide.map(
+              mdata.forecast && mdata.forecast.forecastday[0].day.tides[0].tide.map(
                 (t: any, i: number) => (
                   <View key={i} style={styles.marine}>
                     <Image
