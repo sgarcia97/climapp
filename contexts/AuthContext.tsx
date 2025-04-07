@@ -4,6 +4,7 @@ import {
   useState,
   useEffect,
   ReactNode,
+  useRef,
 } from "react";
 import { supabase } from "../api/UserApi";
 import { Session, AuthError } from "@supabase/supabase-js";
@@ -14,6 +15,7 @@ interface AuthContextType {
   isGuest: boolean;
   justSignedUp: boolean;
   isLoading: boolean;
+  setIsUpdatingProfile: (value: boolean) => void;
   signUp: (
     email: string,
     password: string,
@@ -36,6 +38,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isGuest, setIsGuest] = useState<boolean>(false);
   const [justSignedUp, setJustSignedUp] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+  const isUpdatingRef = useRef(isUpdatingProfile);
   const router = useRouter();
 
   useEffect(() => {
@@ -53,7 +57,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setSession(session);
       setIsLoading(false);
 
-      if (event === "SIGNED_IN" && !isGuest) {
+      if (event === "SIGNED_IN" && !isGuest && !isUpdatingRef) {
         router.replace("/(tabs)/home");
       } else if (event === "SIGNED_OUT" || isGuest) {
         router.replace("/(auth)/login");
@@ -64,6 +68,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     return () => subscription.unsubscribe();
   }, [isGuest]);
+
+  useEffect(() => {
+    isUpdatingRef.current = isUpdatingProfile;
+  }, [isUpdatingProfile]);
 
   const signUp = async (
     email: string,
@@ -111,6 +119,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     isGuest,
     justSignedUp,
     isLoading,
+    setIsUpdatingProfile,
     signUp,
     signIn,
     signOut,
