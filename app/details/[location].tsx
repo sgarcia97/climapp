@@ -70,6 +70,7 @@ const Location = () => {
   });
   return (
 
+
     <Template isDay={id}>  
       <ScrollView stickyHeaderIndices={Platform.OS === 'ios' ? [0] : []} style={styles.scrView} refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -164,6 +165,7 @@ const Location = () => {
      
 </View>
   
+
         <View style={styles.mainView}>
        
      
