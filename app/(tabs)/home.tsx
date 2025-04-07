@@ -269,7 +269,7 @@ const Home = () => {
               condition={data.current.condition.text}
               feel={data.current.feelslike_c}
             />
-            {data.forecast && data.forecast.forecastday.map((item: any, i: number) =>
+            {data && data.forecast && data.forecast.forecastday.map((item: any, i: number) =>
               item.hour.map((h: any, i: number) => {
                 const icon = weatherIcons.find((i) => {
                   return i.code === h.condition.code;
@@ -374,7 +374,7 @@ const Home = () => {
           </View>
           <Subtitle title="What's the next week looking like" isDay={id} />
           <View style={styles.dayWrapper}>
-            {data.forecast && data.forecast.forecastday.map((item: any, i: number) => {
+            {data && data.forecast && data.forecast.forecastday.map((item: any, i: number) => {
               const icon = weatherIcons.find((i) => {
                 return i.code === item.day.condition.code;
               });
@@ -400,7 +400,7 @@ const Home = () => {
           </View>
           <View style={styles.cardWrapper}>
             <Card
-              title="Precipitation"
+              title="Precipitation (mm)"
               img={require("../../assets/weather/umbrella.png")}
               val={data.current.precip_mm}
               isDay={data.current.is_day}
@@ -431,19 +431,19 @@ const Home = () => {
               isDay={data.current.is_day}
             />
             <Card
-              title="Visibility"
+              title="Visibility (km)"
               img={require("../../assets/visibility.png")}
               val={data.current.vis_km}
               isDay={data.current.is_day}
             />
             <Card
-              title="Pressure"
+              title="Pressure (hPa)"
               img={require("../../assets/weather/pressure.png")}
               val={data.current.pressure_mb}
               isDay={data.current.is_day}
             />
             <Card
-              title="Wind Speed"
+              title="Wind Speed (km/h)"
               img={require("../../assets/weather/windy.png")}
               val={data.current.wind_kph}
               isDay={data.current.is_day}
@@ -458,7 +458,7 @@ const Home = () => {
                   style={{ width: 90, height: 90 }}
                 />
                 <Text
-                  style={{ fontSize: 18, fontWeight: 700, color: "#0000000" }}
+                  style={{ fontSize: 14, fontWeight: 700, color: "#0000000" }}
                 >
                   {adata.astronomy.astro.moon_phase}
                 </Text>
@@ -497,10 +497,10 @@ const Home = () => {
           )}
           <Subtitle title="Sail the Seas" isDay={id} />
           <View style={styles.cardBig}>
-            {mdata && mdata.error ? (
+            {mdata && mdata.forecast && mdata.error ? (
               <Text>No data found for this location</Text>
             ) : (
-              mdata.forecast && mdata.forecast.forecastday[0].day.tides[0].tide.map(
+              mdata && mdata.forecast && mdata.forecast.forecastday[0].day.tides[0].tide.map(
                 (t: any, i: number) => (
                   <View key={i} style={styles.marine}>
                     <Image

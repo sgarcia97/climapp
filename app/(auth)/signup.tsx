@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextInput, Alert, ScrollView, View, Text } from "react-native";
+import { TextInput, Alert, ScrollView, View, Text, Image } from "react-native";
 import ClimButton from "../../components/ClimButton";
 import Template from "../../components/Template";
 import { styles } from "../../styles/styles";
@@ -99,6 +99,7 @@ const SignUp = () => {
     <Template title="Sign Up" vCentered={true}>
       <ScrollView style={styles.scrView}>
         <View style={styles.staticView}>
+          <Image style={styles.logo} source={require('../../assets/logo.png')}/>
           <View style={[styles.titleWrapper]}><Text style={[styles.title, styles.center]}>Sign Up to Climapp</Text></View>
       <TextInput
         placeholder="Display Name (optional)"

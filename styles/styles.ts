@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     gap: 10,
     paddingInline: 15,
     justifyContent: "center",
-    paddingTop: 60,
+    paddingTop: 30,
   },
   mainViewVCentered: {
     flex: 1,
@@ -293,6 +293,14 @@ export const styles = StyleSheet.create({
     flexDirection:"row",
     alignItems:"center",
     gap:10
+  },
+  logo:{
+    width:100, 
+    height:100, 
+    position:"relative", 
+    marginInline:"auto", 
+    marginTop:20, 
+    marginBottom:-20
   },
   backWrapperr:{
     padding:15,
